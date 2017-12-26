@@ -23,15 +23,16 @@
                <h1>Welcome back <span>Arthur</span></h1>
                 <p>Choose your character</p>
                 <div class="char">
-                    <p>Jonasz</p>
+                    <p>Jonas Skarabeusz</p>
                     <p>20 lvl</p>
-                    <p>Klasa</p>
+                    <p>Zabójca</p>
                 </div>
                 <div class="char">
                     <p>Zabijaka</p>
                     <p>20 lvl</p>
                     <p>Klasa</p>
                 </div>
+                <a href="game.php">GRAJ</a>
            </div>
         </div>
         <div class="box">

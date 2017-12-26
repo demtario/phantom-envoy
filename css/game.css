@@ -1,0 +1,364 @@
+body{
+    margin: 0;
+    height: 100vh;
+    background-color: #333;
+    overflow: hidden;
+    font-family: 'Lato';
+}
+
+.board
+{
+    position: relative;
+    width: 100%;
+    height: calc(100vh - 200px);
+}
+
+.player{
+    position: absolute;
+    height: 50px;
+    width: 26px;
+    margin: 3px;
+    margin-top: 30px;
+    background-color: cadetblue;
+    transition: 100ms linear;
+}
+
+.player::before
+{
+    content: '';
+    display: block;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: bisque;
+    left: -2px;
+    top: -30px;
+}
+
+.player::after
+{
+    content: '';
+    display: block;
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    border-bottom: solid 30px #A63640;
+    border-left: solid 15px transparent;
+    border-right: solid 15px transparent;
+    left: -3px;
+    top: -55px;
+}
+
+#weapon
+{
+    content: '';
+    display: block;
+    width: 40px;
+    height: 10px;
+    position: absolute;
+    background-color: black;
+    top: 15px;
+    left: 5px;
+}
+
+.npc{
+    position: absolute;
+    height: 50px;
+    width: 26px;
+    margin: 3px;
+    margin-top: 30px;
+    background-color: dimgrey;
+    transition: 100ms linear;
+}
+
+.npc::before
+{
+    content: '';
+    display: block;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background-color: saddlebrown;
+    left: -2px;
+    top: -30px;
+}
+
+.npc::after
+{
+    content: '';
+    display: block;
+    position: absolute;
+    width: 0px;
+    height: 0px;
+    border-bottom: solid 30px royalblue;
+    border-left: solid 15px transparent;
+    border-right: solid 15px transparent;
+    left: -3px;
+    top: -55px;
+}
+
+.npc p
+{
+    width: 60px;
+    font-size: 14px;
+    position: absolute;
+    top: -90px;
+    text-align: center;
+    left: -17px;
+    color: white;
+}
+
+.enemy
+{
+    background-image: url(../img/enemy.png);
+    background-size: contain;
+    background-repeat: no-repeat;
+    position: absolute;
+    width: 150px;
+    height: 150px;
+}
+
+.bullet
+{
+    width: 8px;
+    height: 6px;
+    background-color: goldenrod;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    animation: szczal 1s;
+    animation-timing-function: linear;
+    animation-fill-mode: forwards;
+}
+
+@keyframes szczal {
+    100%{left: 101%;}
+}
+
+.gui
+{
+    position: fixed;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    height: 200px;
+    background-color: #A63640;
+    padding: 20px 470px;
+    box-sizing: border-box;
+}
+
+.info
+{
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: white;
+    width: 450px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.info h1
+{
+    margin: 0;
+    font-size: 40px;
+    color: #A63640;
+}
+
+.info p
+{
+    font-size: 20px;
+    margin: 0;
+    color: #aaa;
+    padding-bottom: 10px;
+}
+
+#life
+{
+    width: 100%;
+    background-color: rgba(166,54,64,0.1);
+    border: solid 2px greenyellow;
+    height: 26px;
+    position: relative;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+#life-bar
+{
+    height: 100%;
+    background-color: greenyellow;
+    transition: 0.3s;
+}
+
+#life-info
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 50px;
+    font-size: 16px;
+    line-height: 16px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+#life-info::before
+{
+    content: 'HP: ';
+}
+
+#exp
+{
+    width: 100%;
+    background-color: rgba(166,54,64,0.1);
+    border: solid 2px deepskyblue;
+    height: 26px;
+    position: relative;
+    border-radius: 5px;
+}
+
+#exp-bar
+{
+    height: 100%;
+    width: 50%;
+    background-color: deepskyblue;
+    transition: 0.3s;
+}
+
+#exp-info
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 50px;
+    font-size: 16px;
+    line-height: 16px;
+    padding: 5px;
+    box-sizing: border-box;
+}
+
+#exp-info::before
+{
+    content: 'EXP: ';
+}
+
+#gun
+{
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 450px;
+    background-color: white;
+    text-align: right;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+#gun::before
+{
+    content: '';
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    width: 200px;
+    background-image: url(../img/bron.jpg);
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: bottom;
+}
+
+#gun div
+{
+    margin: 5px 0;
+}
+
+#gun-name
+{
+    font-size: 40px;
+}
+
+#gun-mag
+{
+    font-size: 24px;
+}
+
+#gun-mag::before{
+    content: 'W magazynku: ';
+}
+
+#gun-ammo::before{
+    content: 'Amunicja: ';
+}
+
+#gun-reloading
+{
+    color: red;
+    font-size: 24px;
+    font-style: italic;
+}
+
+#zgon
+{
+    position: fixed;
+    top: -100%;
+    left: 0;
+    background-color: rgba(0,0,0,0.5);
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    transition: 0.1s;
+}
+
+#zgon.online
+{
+    top: 0;
+    opacity: 1;
+}
+
+#zgon .modal
+{
+    background-color: white;
+    padding: 10px;
+    width: 400px;
+    flex-direction: column;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: solid 5px #A63640;
+    border-radius: 5px;
+}
+
+#zgon .modal p
+{
+    margin: 0;
+    color: #A63640;
+    font-size: 36px;
+}
+
+#zgon .modal a
+{
+    margin: 0;
+    display: block;
+    padding: 6px;
+    color: white;
+    background-color: #A63640;
+    border-radius: 3px;
+    margin-top: 10px;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+#zgon .modal a:hover
+{
+    filter: brightness(1.2);
+}

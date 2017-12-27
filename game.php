@@ -26,26 +26,27 @@
             
         </div>
         
-        <div class="gui">
-            <div class="info">
-                <h1>Jonas Skarabeusz</h1>
-                <p>Zabójca  - 20 lvl</p>
-                <div id="life">
-                    <div id="life-bar"></div>
-                    <div id="life-info"></div>
-                </div>
-                
-                <div id="exp">
-                    <div id="exp-bar"></div>
-                    <div id="exp-info">600/1200</div>
-                </div>
+        <div class="user">
+            <img src="img/face.jpg" class="user-picture" />
+            <h1>Jonas Skarabeusz</h1>
+            <div class="user-life">
+                <div id="life-bar"></div>
+                <div id="life-info"></div>
+            </div>    
+            <div class="user-mana">
+                <div id="mana-bar"></div>
+                <div id="mana-info">500/1000</div>
             </div>
-            <button onclick="hurtMe(50);">Zrań mnie!</button>
-            <div id="gun">
-                <div id="gun-name"></div>
-                <div id="gun-mag"></div>
-                <div id="gun-ammo"></div>
-                <div id="gun-reloading"></div>
+        </div>
+        
+        <div class="map"></div>
+        
+        <div class="guns">
+            <h2 id="gun-name">Ak-47</h2>
+            <p><span id="gun-mag"></span>/<span id="gun-ammo"></span></p>
+            <img src="img/bron.jpg" />
+            <div id="gun-reloading">
+                <div id="gun-reloading-bar"></div>
             </div>
         </div>
         

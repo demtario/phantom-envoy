@@ -1,5 +1,5 @@
-var maxHp = 1200,
-    hp = 500;
+var maxHp = 2000,
+    hp = 1280;
 
 function hpRefreash() {
     $('#life-bar').css('width', (hp/maxHp)*100+'%');

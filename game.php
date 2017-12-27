@@ -16,15 +16,7 @@
 		<link rel="stylesheet" href="css/normalize.css" />
         <link rel="stylesheet" href="css/game.css?<?php echo $rand; ?>" />
     </head>
-    <body onload="">
-        
-        <div class="board">
-            <div class="player" id="player1">
-                <div id="weapon"></div>
-            </div>
-            
-            
-        </div>
+    <body>
         
         <div class="user">
             <img src="img/face.jpg" class="user-picture" />
@@ -35,7 +27,7 @@
             </div>    
             <div class="user-mana">
                 <div id="mana-bar"></div>
-                <div id="mana-info">500/1000</div>
+                <div id="mana-info"></div>
             </div>
         </div>
         
@@ -59,9 +51,7 @@
         
         <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
         <script type="text/javascript" src="js/core.js?<?php echo $rand; ?>"></script>
-        <script type="text/javascript" src="js/movement.js?<?php echo $rand; ?>"></script>
-        <script type="text/javascript" src="js/life.js?<?php echo $rand; ?>"></script>
-        <script type="text/javascript" src="js/gun.js?<?php echo $rand; ?>"></script>
-        <script type="text/javascript" src="js/npc.js?<?php echo $rand; ?>"></script>
+        <script type="text/javascript" src="js/player.js?<?php echo $rand; ?>"></script>
+        <script type="text/javascript" src="js/weapon.js?<?php echo $rand; ?>"></script>
     </body>
 </html>

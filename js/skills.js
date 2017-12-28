@@ -1,0 +1,3 @@
+function Skill(name) {
+    
+}

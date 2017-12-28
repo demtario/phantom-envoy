@@ -4,7 +4,7 @@
 <!DOCTYPE HTML>
 <html lang=”pl”>
     <head>
-        <title>Game</title>
+        <title>Phantom Envoy The Video Game</title>
         <meta charset="UTF-8">
         <meta name="description" content="template" />
         <meta name="keywords" content="Tutaj słowa kluczowe oddzielone przecinkiem" />
@@ -20,7 +20,7 @@
         
         <div class="user">
             <img src="img/face.jpg" class="user-picture" />
-            <h1>Jonas Skarabeusz</h1>
+            <h1 id="username"></h1>
             <div class="user-life">
                 <div id="life-bar"></div>
                 <div id="life-info"></div>
@@ -31,7 +31,17 @@
             </div>
         </div>
         
-        <div class="map"></div>
+        <div class="asidearea">
+            <div class="asideinfo"></div>
+            <div class="map"></div>
+        </div>
+        
+        <div class="skillbar">
+            <div class="skill"></div>
+            <div class="skill"></div>
+            <div class="skill"></div>
+            <div class="skill"></div>
+        </div>
         
         <div class="guns">
             <h2 id="gun-name">Ak-47</h2>
@@ -42,16 +52,10 @@
             </div>
         </div>
         
-        <div id="zgon">
-            <div class="modal">
-                <p>Umarłeś!</p>
-                <a href="game.php">Spróbuj ponownie</a>
-            </div>
-        </div>
-        
         <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
         <script type="text/javascript" src="js/core.js?<?php echo $rand; ?>"></script>
         <script type="text/javascript" src="js/player.js?<?php echo $rand; ?>"></script>
         <script type="text/javascript" src="js/weapon.js?<?php echo $rand; ?>"></script>
+        <script type="text/javascript" src="js/enemy.js?<?php echo $rand; ?>"></script>
     </body>
 </html>

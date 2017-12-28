@@ -24,7 +24,7 @@ body{
     position: fixed;
     top: 20px;
     left: 20px;
-    background-color: rgba(0,170,208,0.2);
+    background-color: rgba(0,170,208,0.3);
     border-bottom-left-radius: 100px;
     border-top-right-radius: 100px;
 }
@@ -86,7 +86,7 @@ body{
 {
     width: 100%;
     background-color: rgba(0,120,253,0.2);
-    border: solid 2px #0078FD;
+    border: solid 2px #0068FF;
     height: 26px;
     position: relative;
     border-radius: 5px;
@@ -96,7 +96,7 @@ body{
 #mana-bar
 {
     height: 100%;
-    background-color: #0078FD;
+    background-color: #0068FF;
     transition: 0.3s;
 }
 
@@ -118,16 +118,73 @@ body{
     content: 'MANA: ';
 }
 
-.map
+.asidearea
 {
+    background-color: rgba(0,170,208,0.3);
+    width: 220px;
+    padding: 20px;
     position: fixed;
     top: 20px;
     right: 20px;
     border-radius: 50%;
+    border-top-right-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.asideinfo
+{
+    width: 0px;
+}
+
+.map
+{
     width: 220px;
     height: 220px;
+    border-radius: 50%;
+    border-top-right-radius: 10px;
     background-image: url(../img/mapka.jpg);
-    border: solid 5px #A63640;
+}
+
+.skillbar
+{
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    background-color: rgba(0,170,208,0.3);
+    padding: 20px 30px;
+    border-radius: 10px;
+    border-top-left-radius: 100px;
+    border-bottom-right-radius: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    counter-reset: key-number;
+}
+
+.skill
+{
+    height: 75px;
+    width: 75px;
+    background-color: rgba(0,170,208,0.6);
+    color: white;
+    border-radius: 5px;
+    border-top-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    margin: 0 5px;
+    counter-increment: key-number;
+    position: relative;
+    box-sizing: border-box;
+}
+
+.skill::before
+{
+    content: "[" counter(key-number) "]";
+    font-size: 20px;
+    position: absolute;
+    bottom: 4px;
+    left: 4px;
 }
 
 .guns
@@ -147,8 +204,7 @@ body{
         'reloading primary';
     padding: 10px;
     
-    background-color: rgba(0,170,208,0.2);
-/*    border: solid 5px #A63640;*/
+    background-color: rgba(0,170,208,0.3);
     border-bottom-left-radius: 100px;
     border-top-right-radius: 100px;
     
@@ -205,63 +261,4 @@ body{
     background-color: darkred;
     transition-timing-function: linear !important;
     margin: 0 !important;
-}
-
-#zgon
-{
-    position: fixed;
-    top: -100%;
-    left: 0;
-    background-color: rgba(0,0,0,0.5);
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    opacity: 0;
-    transition: 0.1s;
-}
-
-#zgon.online
-{
-    top: 0;
-    opacity: 1;
-}
-
-#zgon .modal
-{
-    background-color: white;
-    padding: 10px;
-    width: 400px;
-    flex-direction: column;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    border: solid 5px #A63640;
-    border-radius: 5px;
-}
-
-#zgon .modal p
-{
-    margin: 0;
-    color: #A63640;
-    font-size: 36px;
-}
-
-#zgon .modal a
-{
-    margin: 0;
-    display: block;
-    padding: 6px;
-    color: white;
-    background-color: #A63640;
-    border-radius: 3px;
-    margin-top: 10px;
-    text-decoration: none;
-    transition: 0.3s;
-}
-
-#zgon .modal a:hover
-{
-    filter: brightness(1.2);
 }

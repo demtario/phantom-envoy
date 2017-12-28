@@ -32,17 +32,24 @@ var Key = {
 window.addEventListener('keyup', function(event) { Key.onKeyup(event); }, false);
 window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);
 
+// Wykrywanie przycisków
 var mouseDown=false;
 window.addEventListener('mousedown', function() { mouseDown=true }, false);
 window.addEventListener('mouseup', function() { mouseDown=false }, false);
 
-document.addEventListener('keydown', function(event) { nowClicked = event.keyCode; });
 var nowClicked;
+document.addEventListener('keydown', function(e) { nowClicked = e.keyCode; });
 
+var scrolling;
+window.addEventListener('mousewheel', function(e) { scrolling=true; });
+
+//Obiekt gra
 var Game = {
     fps: 60,
     width: window.innerWidth,
     height: window.innerHeight,
+    endGame: false,
+    score: 0
 };
 
 Game._onEachFrame = (function() {
@@ -64,8 +71,6 @@ var cursorX, cursorY;
 
 Game.start = function() {
     
-    
-    
     Game.canvas = document.createElement("canvas");
     Game.canvas.width = Game.width;
     Game.canvas.height = Game.height;
@@ -74,7 +79,10 @@ Game.start = function() {
     
     document.body.appendChild(Game.canvas);
     
-    Game.player = new Player();
+    Game.player = new Player('Jonas Skarabeusz');
+    
+    this.enemies = [];
+    this.wave = 1;
     
     Game._onEachFrame(Game.run);
 }
@@ -85,28 +93,75 @@ Game.run = (function() {
         nextGameTick = (new Date).getTime(),
         lastGameTick;
     
+    
     return function() {
         loops = 0;
         
         while ((new Date).getTime() > nextGameTick) {
-            Game.update();
+            if(Game.endGame == false) Game.update();
             nextGameTick += skipTicks;
             loops++;
         }
         
-        if(loops) Game.draw();
+        if(loops) {
+            if(Game.endGame == false) Game.draw();
+            else Game.drawEnd();
+        }
     }
 })();
 
 Game.draw = function() {
+    // Czyści plansze
     Game.context.clearRect(0, 0, Game.width, Game.height);
+    
+    // Rysuje gracza
     Game.player.draw(Game.context);
+    
+    // Rysuje wrogów
+    for(var i = 0; i<this.enemies.length; i++) Game.enemies[i].draw(Game.context);
 };
+
+Game.drawEnd = function() {
+    Game.context.clearRect(0, 0, Game.width, Game.height);
+    Game.context.font = "60px Arial";
+    Game.context.fillStyle = "darkred";
+    Game.context.fillText("Game Over",200,500);
+    Game.context.font = "20px Arial";
+    Game.context.fillStyle = "white";
+    Game.context.fillText("Zabici wrogowie: "+Game.score,210,540);
+}
 
 Game.update = function() {
     
     document.onmousemove=function(e){cursorX=(e=e||event).clientX;cursorY=e.clientY}
     
+    // Gracz
     Game.player.update();
     
+    // Zgon gracza
+    if(this.player.hp <= 0 && this.player.dead == false) {
+        this.player.dead = true;
+        Game.endGame = true;
+    }
+    
+    // Wrogowie
+    for(var i = 0; i<this.enemies.length; i++) {
+        
+        Game.enemies[i].update();
+        
+        // Jeśli umarł
+        if(Game.enemies[i].hp <= 0) {
+            delete Game.enemies[i];
+            Game.enemies.splice(i,1);
+            Game.score++;
+        }
+    }
+    
+    // Tworzenie wrogów
+    
+    if(Game.enemies.length == 0){
+        for(var i = 0; i<this.wave; i++) Game.enemies[i] = new Mob(i, 'Albert');
+        this.wave++;
+    }
+        
 };

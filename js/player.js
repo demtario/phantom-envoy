@@ -1,11 +1,14 @@
-function Player() {
-    this.x = 100;
-    this.y = 500;
-    this.angle;
+function Player(name) {
+    this.name = name;
     
-    this.hp = 500;
+    this.x = Game.width/2;
+    this.y = Game.height/2;
+    this.angle;
+    this.moveSpeed = 120; // px/s
+    
+    this.hp = 1000;
     this.maxHp = 1000;
-    this.zgonAlert = false;
+    this.dead = false;
     
     this.mana = 600;
     this.maxMana = 1400;
@@ -65,13 +68,14 @@ Player.prototype.update = function() {
     
     for(var i = 0; i < this.bullets.length; i++) {
         
-        this.bullets[i].move();
-        
         //niszczy pociski poza planszą
         if(this.bullets[i].currX > Game.width+20 || this.bullets[i].currX < -20 || this.bullets[i].currY > Game.height+20 || this.bullets[i].currY < -20) {
             delete this.bullets[i];
             this.bullets.splice(i,1);
         }
+        
+        if(this.bullets[i]) this.bullets[i].move();
+        
     }
     
     //Przeładowanie
@@ -81,12 +85,16 @@ Player.prototype.update = function() {
     } 
     
     //Zmiana broni
-    if(nowClicked == 69) {
+    if(nowClicked == 69 || scrolling == true) {
         this.switchWeapon();
         nowClicked = 'e';
+        scrolling = false;
     }
     
     // Aktualizacja GUI
+    
+    document.getElementById("username").innerHTML = this.name;
+    
     $('#life-bar').css('width', (this.hp/this.maxHp)*100+'%');
     $('#life-info').html(this.hp+'/'+this.maxHp);
     
@@ -100,30 +108,22 @@ Player.prototype.update = function() {
     // Kąt obrotu
     this.angle = Math.atan2(cursorX - this.x, - (cursorY - this.y) )*(180/Math.PI) - 90;
     
-    // Zgon
-    if(this.hp <= 0 && this.zgonAlert == false) {
-        this.zgonAlert = true;
-        
-        // Tutaj kod po śmierci
-        alert('umarles');
-    }
-    
 }
 
 Player.prototype.moveLeft = function() {
-    this.x -=2;
+    this.x -= this.moveSpeed/Game.fps;
 }
 
 Player.prototype.moveRight = function() {
-    this.x +=2;
+    this.x += this.moveSpeed/Game.fps;
 }
 
 Player.prototype.moveUp = function() {
-    this.y -=2;
+    this.y -= this.moveSpeed/Game.fps;
 }
 
 Player.prototype.moveDown = function() {
-    this.y +=2;
+    this.y += this.moveSpeed/Game.fps;
 } 
 
 Player.prototype.hurt = function(ile) {

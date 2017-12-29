@@ -117,19 +117,19 @@ Player.prototype.update = function() {
 }
 
 Player.prototype.moveLeft = function() {
-    this.x -= this.moveSpeed/Game.fps;
+    if(this.x > 20) this.x -= this.moveSpeed/Game.fps;
 }
 
 Player.prototype.moveRight = function() {
-    this.x += this.moveSpeed/Game.fps;
+    if(this.x < Game.width - 20) this.x += this.moveSpeed/Game.fps;
 }
 
 Player.prototype.moveUp = function() {
-    this.y -= this.moveSpeed/Game.fps;
+    if(this.y > 20) this.y -= this.moveSpeed/Game.fps;
 }
 
 Player.prototype.moveDown = function() {
-    this.y += this.moveSpeed/Game.fps;
+    if(this.y < Game.height - 20) this.y += this.moveSpeed/Game.fps;
 } 
 
 Player.prototype.hurt = function(ile) {

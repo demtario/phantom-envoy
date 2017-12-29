@@ -29,8 +29,9 @@ body
     width: 500px;
     padding: 20px;
     box-sizing: border-box;
-    background-color: #fff;
+    background-color: rgba(0,170,208,0.6);
     text-align: center;
+    color: white;
 }
 
 .characters h1 span
@@ -40,7 +41,7 @@ body
 
 .characters > p
 {
-    color: #777;
+    color: #ddd;
     font-style: italic;
 }
 
@@ -54,13 +55,13 @@ body
     grid-template-columns: 1fr 1fr;
     grid-template-rows: 25px 25px;
     cursor: pointer;
-    background-color: white;
+    background-color: rgba(0,170,208,0.3);
     transition: 0.3s;
 }
 
 .char:hover
 {
-    background-color: rgba(166,54,64,0.1);
+    background-color: rgba(0,170,208,0.6);
 }
 
 .characters .char:nth-child(3)
@@ -90,9 +91,42 @@ body
 
 .char p:nth-child(3){
     font-size: 14px;
-    color: #999;
+    color: #ddd;
 }
 
+a.button
+{
+    display: block;
+    width: 120px;
+    margin: 10px auto;
+    padding: 20px;
+    color: white;
+    font-weight: 700;
+    text-decoration: none;
+    background-color: #A63640;
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+a.button:hover
+{
+    background-color: #952530;
+}
+
+.sterowanie
+{
+    background-color: rgba(0,170,208,0.5);
+    padding: 20px;
+    color: white;
+    text-align: center;
+    font-size: 20px;
+    line-height: 2em;
+}
+
+.key
+{
+    font-size: 1.4em;
+}
 
 
 /* tablety */

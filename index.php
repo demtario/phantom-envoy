@@ -32,14 +32,23 @@
                     <p>20 lvl</p>
                     <p>Klasa</p>
                 </div>
-                <a href="game.php">GRAJ</a>
+                <a class="button" href="game.php">GRAJ</a>
            </div>
         </div>
         <div class="box">
-            <img src="img/face.jpg" />
+            <div class="sterowanie">
+               <h2>Sterowanie</h2>
+                <span class="key">[W]</span> - Ruch do góry<br />
+                <span class="key">[S]</span> - Ruch na dół<br />
+                <span class="key">[A]</span> - Ruch w lewo<br />
+                <span class="key">[D]</span> - Ruch w prawo<br />
+                <span class="key">[E]</span> - Zmiana broni<br />
+                <span class="key">[R]</span> - Przeładowanie broni<br />
+            </div>
         </div>
+        <script> //var sugesterChatOptions = {"login":"your user login","client_id":"your client id","info":"your additional data"}</script>
+        <script src="https://cdn.intum.com/0/h/heseya/chat/JeQg5IY81hMejG4YWxho/widget.js"></script>
         
-        <script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"></script>
-        <script type="text/javascript" src="js/scripts.js?<?php echo $rand; ?>"></script>
+        <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
     </body>
 </html>

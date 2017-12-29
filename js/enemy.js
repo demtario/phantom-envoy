@@ -7,9 +7,9 @@ function Mob(index, name) {
     this.angle = 0;
     this.moveSpeed = 120; // px/s
     
-    this.attackSpeed = 3; // ciosy na sekunde
+    this.attackSpeed = 2; // ciosy na sekunde
     this.damage = 20;
-    this.attackRange = 50; // kwadrat o daną odległość od centrum mobka
+    this.attackRange = 45; // kwadrat o daną odległość od centrum mobka
     this.attackDelay = false;
     
     this.hp = 500;
@@ -21,6 +21,11 @@ Mob.prototype.draw = function(context) {
     
     context.save();
     context.translate(this.x, this.y);
+    
+    context.font = "20px Arial";
+    context.fillStyle = "white";
+    context.fillText(this.hp,-10,-30);
+    
     context.rotate(this.angle * Math.PI/180);
     
     context.fillStyle='darkred';
@@ -30,6 +35,7 @@ Mob.prototype.draw = function(context) {
     context.fillStyle = 'darksalmon';
     context.arc(0,0,20,0,2*Math.PI);
     context.fill();
+    
     context.closePath();
     
     context.restore();
@@ -54,19 +60,19 @@ Mob.prototype.update = function() {
 }
 
 Mob.prototype.moveLeft = function() {
-    this.x -= this.moveSpeed/Game.fps;
+    if(this.x > 20) this.x -= this.moveSpeed/Game.fps;
 }
 
 Mob.prototype.moveRight = function() {
-    this.x += this.moveSpeed/Game.fps;
+    if(this.x < Game.width - 20) this.x += this.moveSpeed/Game.fps;
 }
 
 Mob.prototype.moveUp = function() {
-    this.y -= this.moveSpeed/Game.fps;
+    if(this.y > 20) this.y -= this.moveSpeed/Game.fps;
 }
 
 Mob.prototype.moveDown = function() {
-    this.y += this.moveSpeed/Game.fps;
+    if(this.y < Game.height - 20) this.y += this.moveSpeed/Game.fps;
 }
 
 Mob.prototype.hurt = function(ile) {

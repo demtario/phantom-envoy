@@ -51,8 +51,10 @@ function Bullet(index, sourceX, sourceY, speed, angle, damage, parent) {
     }
     
     this.dealDamage = function(target){
-        target.hurt(this.damage);
-        this.shallBeDestroyed = true;
+        if(!this.shallBeDestroyed) {
+            target.hurt(this.damage);
+            this.shallBeDestroyed = true;
+        }
     }
     
 }

@@ -8,7 +8,7 @@ function Weapon(name, magSize, fireRate, reloadTime, bulletVelocity, maxDamage, 
     this.color = color;
 
     this.mag = magSize;
-    this.ammo = 400;
+    this.ammo = 400 - this.mag;
     this.delay = false;
 
 }
@@ -51,13 +51,8 @@ function Bullet(index, sourceX, sourceY, speed, angle, damage, parent) {
     }
     
     this.dealDamage = function(target){
-        
         target.hurt(this.damage);
-        
-        delete this.parent.bullets[this.index];
-        this.parent.bullets.splice(this.index,1);
-        
-        console.log(target.hp);
+        this.shallBeDestroyed = true;
     }
     
 }
@@ -76,6 +71,8 @@ Player.prototype.shoot = function() {
                 this.bullets.push(newBullet);
                     
                 this.weapon.mag--;
+                
+                if(Game.sound) shot2Sound.play();
 
                 this.weapon.delay = true;
                 let currThis = this;
@@ -96,6 +93,9 @@ Player.prototype.shoot = function() {
             this.shoot();
 
         }
+    } else {
+        //brak pocisków w magazynku
+        if(Game.sound) emptySound.play();
     }
 }
 
@@ -143,6 +143,8 @@ Player.prototype.reloadWeapon = function() {
                 play.moveSpeed = oldSpeed;
                 document.getElementById("gun-reloading-bar").style.transition = "0s";
                 document.getElementById("gun-reloading-bar").style.width = "0";
+                
+                if(Game.sound) reloadSound.play();
             }
             
         } else {

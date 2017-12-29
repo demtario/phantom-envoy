@@ -6,6 +6,10 @@ body{
     background-color: #666;
 }
 
+*{
+    user-select: none;
+}
+
 /* GUI */
 
 .user

@@ -2,6 +2,11 @@ $( document ).ready(function() {
     Game.start();
 });
 
+var reloadSound = new Audio("music/reload.wav");
+var shotSound = new Audio("music/shot.wav");
+var shot2Sound = new Audio("music/shot2.wav");
+var emptySound = new Audio("music/empty.wav");
+
 // Poruszanie się
 var Key = {
     _pressed: {},
@@ -49,7 +54,8 @@ var Game = {
     width: window.innerWidth,
     height: window.innerHeight,
     endGame: false,
-    score: 0
+    score: 0,
+    sound: false
 };
 
 Game._onEachFrame = (function() {

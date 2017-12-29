@@ -80,7 +80,6 @@ Mob.prototype.attack = function(target) {
         this.attackDelay = true;
         
         target.hurt(this.damage);
-//        console.log('atak!');
         
         let currThis = this;
         setTimeout(function() { resetAttackDelay(currThis); }, 1000/this.attackSpeed);

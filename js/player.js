@@ -66,15 +66,21 @@ Player.prototype.update = function() {
     //Strzelanie
     if(mouseDown) this.shoot();
     
+    //Kontrola pocisków
     for(var i = 0; i < this.bullets.length; i++) {
         
-        //niszczy pociski poza planszą
+        //sprawdza czy pocisk wyleciał poza planszę
         if(this.bullets[i].currX > Game.width+20 || this.bullets[i].currX < -20 || this.bullets[i].currY > Game.height+20 || this.bullets[i].currY < -20) {
+            this.bullets[i].shallBeDestroyed = true;
+        }
+        
+        this.bullets[i].move();
+        
+        // usuwa pocisk jeśli powinien zostać zniszczony
+        if(this.bullets[i].shallBeDestroyed) {
             delete this.bullets[i];
             this.bullets.splice(i,1);
         }
-        
-        if(this.bullets[i]) this.bullets[i].move();
         
     }
     

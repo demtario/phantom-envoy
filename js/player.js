@@ -13,10 +13,12 @@ function Player(name) {
     this.mana = 600;
     this.maxMana = 1400;
     
+    this.kills = 0;
+    
     this.reloading = false;
     
-    this.primaryWeapon = new Weapon('AK-47', 30, 650, 3500, 600, 18, 25, '#333');
-    this.secondaryWeapon = new Weapon('P90', 50, 900, 3000, 420, 11, 20, '#169');
+    this.primaryWeapon = new Weapon('AK-47', 30, 650, 3500, 1200, 18, 25, '#333');
+    this.secondaryWeapon = new Weapon('P90', 50, 900, 3000, 840, 11, 20, '#169');
     
     this.weapon = this.primaryWeapon;
     
@@ -97,6 +99,18 @@ Player.prototype.update = function() {
         scrolling = false;
     }
     
+    //Sprint
+    if(Key.isDown(Key.SHIFT) && !this.reloading) {
+        this.speedModifier = 1.2;
+        this.sprint = true;
+    }
+    else if(this.reloading) {
+        this.sprint = false;
+    } else {
+        this.speedModifier = 1;
+        this.sprint = false;
+    }
+    
     // Aktualizacja GUI
     
     document.getElementById("username").innerHTML = this.name;
@@ -106,6 +120,8 @@ Player.prototype.update = function() {
     
     $('#mana-bar').css('width', (this.mana/this.maxMana)*100+'%');
     $('#mana-info').html(this.mana+'/'+this.maxMana);
+    
+    document.getElementById("kills").innerHTML = this.kills;
     
     document.getElementById("gun-mag").innerHTML = this.weapon.mag;
     document.getElementById("gun-ammo").innerHTML = this.weapon.ammo;
@@ -117,19 +133,19 @@ Player.prototype.update = function() {
 }
 
 Player.prototype.moveLeft = function() {
-    if(this.x > 20) this.x -= this.moveSpeed/Game.fps;
+    if(this.x > 20) this.x -= this.moveSpeed/Game.fps*this.speedModifier;
 }
 
 Player.prototype.moveRight = function() {
-    if(this.x < Game.width - 20) this.x += this.moveSpeed/Game.fps;
+    if(this.x < Game.width - 20) this.x += this.moveSpeed/Game.fps*this.speedModifier;
 }
 
 Player.prototype.moveUp = function() {
-    if(this.y > 20) this.y -= this.moveSpeed/Game.fps;
+    if(this.y > 20) this.y -= this.moveSpeed/Game.fps*this.speedModifier;
 }
 
 Player.prototype.moveDown = function() {
-    if(this.y < Game.height - 20) this.y += this.moveSpeed/Game.fps;
+    if(this.y < Game.height - 20) this.y += this.moveSpeed/Game.fps*this.speedModifier;
 } 
 
 Player.prototype.hurt = function(ile) {

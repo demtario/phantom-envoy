@@ -1,4 +1,4 @@
-function Weapon(name, magSize, fireRate, reloadTime, bulletVelocity, maxDamage, minDamage, color) {
+function Weapon(name, magSize, fireRate, reloadTime, bulletVelocity, maxDamage, minDamage, color='#333') {
     this.name = name;
     this.magSize = magSize;
     this.fireRate = 60000/fireRate; //RPM
@@ -9,6 +9,10 @@ function Weapon(name, magSize, fireRate, reloadTime, bulletVelocity, maxDamage, 
 
     this.mag = magSize;
     this.ammo = 400 - this.mag;
+    if(this.ammo<0) {
+        this.mag += this.ammo;
+        this.ammo = 0;
+    }
     this.delay = false;
 
 }
@@ -23,7 +27,10 @@ function Bullet(index, sourceX, sourceY, speed, angle, damage, parent) {
     this.directionX = cursorX - this.currX;
     this.directionY = cursorY - this.currY;
     this.speed = speed;
-    this.angle = (angle+90) * Math.PI/180;
+    
+    this.rozrzut = Math.round(Math.random()*6)-3;
+    
+    this.angle = (angle+this.rozrzut+90) * Math.PI/180;
     this.damage = damage;
 
     this.init = function(context) {
@@ -60,11 +67,11 @@ function Bullet(index, sourceX, sourceY, speed, angle, damage, parent) {
 }
 
 Player.prototype.shoot = function() {
-    if(this.weapon.mag > 0) {
+    if(this.weapon.mag > 0 && !this.sprint) {
 
-        if(this.reloading == false) {
+        if(!this.reloading) {
 
-            if(this.weapon.delay == false) {
+            if(!this.weapon.delay) {
                     
                 // Strzal
                 let damageRand = Math.floor(Math.random()*(this.weapon.damage[1]-this.weapon.damage[0]+1)+this.weapon.damage[1]);
@@ -115,7 +122,7 @@ Player.prototype.switchWeapon = function() {
 
 Player.prototype.reloadWeapon = function() {
     
-    if(this.reloading == false) {
+    if(this.reloading == false && this.speedModifier==1) {
         
         if(this.weapon.ammo > 0 && this.weapon.mag < this.weapon.magSize) {
             
@@ -123,7 +130,7 @@ Player.prototype.reloadWeapon = function() {
             document.getElementById("gun-reloading-bar").style.transition = this.weapon.reloadTime/1000 + "s linear";
             document.getElementById("gun-reloading-bar").style.width = "100%";
             var oldSpeed = this.moveSpeed;
-            this.moveSpeed /= 2;
+            this.speedModifier = 1/2;
             
             let currThis = this;
             
@@ -142,7 +149,7 @@ Player.prototype.reloadWeapon = function() {
                 play.weapon.ammo -= play.weapon.mag;
                 play.reloading = false;
                 
-                play.moveSpeed = oldSpeed;
+                play.speedModifier = 1;
                 document.getElementById("gun-reloading-bar").style.transition = "0s";
                 document.getElementById("gun-reloading-bar").style.width = "0";
                 

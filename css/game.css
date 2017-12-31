@@ -148,7 +148,26 @@ body{
     height: 220px;
     border-radius: 50%;
     border-top-right-radius: 10px;
-    background-image: url(../img/mapka.jpg);
+/*    background-image: url(../img/mapka.jpg);*/
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.map h3
+{
+    margin: 0;
+    font-size: 50px;
+    color: #8B0000;
+}
+
+.map p
+{
+    margin: 0;
+    font-size: 18px;
+    color: white;
 }
 
 .skillbar

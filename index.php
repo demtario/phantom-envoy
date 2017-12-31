@@ -44,6 +44,8 @@
                 <span class="key">[D]</span> - Ruch w prawo<br />
                 <span class="key">[E]</span> - Zmiana broni<br />
                 <span class="key">[R]</span> - Przeładowanie broni<br />
+                <span class="key">[SHIFT]</span> - Sprint<br />
+                <span class="key">[ESC]</span> - Pauza<br />
             </div>
         </div>
         <script> //var sugesterChatOptions = {"login":"your user login","client_id":"your client id","info":"your additional data"}</script>

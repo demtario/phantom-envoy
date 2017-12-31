@@ -3,7 +3,7 @@ $( document ).ready(function() {
 });
 
 var reloadSound = new Audio("music/reload.wav");
-var shotSound = new Audio("music/shot.wav");
+var shotSound = new Audio("music/shot2.wav");
 var shot2Sound = new Audio("music/shot2.wav");
 var emptySound = new Audio("music/empty.wav");
 
@@ -20,6 +20,8 @@ var Key = {
     S: 83,
     A: 65,
     D: 68,
+    
+    SHIFT: 16,
 
     isDown: function(keyCode) {
         return this._pressed[keyCode];
@@ -54,7 +56,7 @@ var Game = {
     width: window.innerWidth,
     height: window.innerHeight,
     endGame: false,
-    score: 0,
+    gamePaused: false,
     sound: false
 };
 
@@ -99,18 +101,32 @@ Game.run = (function() {
         nextGameTick = (new Date).getTime(),
         lastGameTick;
     
-    
     return function() {
         loops = 0;
         
         while ((new Date).getTime() > nextGameTick) {
-            if(Game.endGame == false) Game.update();
+            if(!Game.endGame && !Game.gamePaused) Game.update();
             nextGameTick += skipTicks;
             loops++;
         }
         
+        //Kontrola pauzy
+        if(nowClicked == 27 && !Game.gamePaused) {
+            Game.gamePaused = true;
+            console.log('pauza');
+            nowClicked = 'esc';
+        } 
+
+        if(nowClicked == 27 && Game.gamePaused) {
+            Game.gamePaused = false;
+            console.log('koniec pauzy');
+            nowClicked = 'esc';
+        }
+        
+        //Pętla gry
         if(loops) {
-            if(Game.endGame == false) Game.draw();
+            if(!Game.endGame && !Game.gamePaused) Game.draw();
+            else if(Game.gamePaused) Game.drawPause();
             else Game.drawEnd();
         }
     }
@@ -128,43 +144,59 @@ Game.draw = function() {
 };
 
 Game.drawEnd = function() {
-    Game.context.clearRect(0, 0, Game.width, Game.height);
+    
+    if(this.player.kills>getCookie('rekord')) setCookie('rekord',Game.player.kills);
+    
+    Game.context.fillStyle = "#444";
+    Game.context.fillRect(0, 0, Game.width, Game.height);
     Game.context.font = "60px Arial";
     Game.context.fillStyle = "darkred";
     Game.context.fillText("Game Over",200,500);
     Game.context.font = "20px Arial";
     Game.context.fillStyle = "white";
-    Game.context.fillText("Zabici wrogowie: "+Game.score,210,540);
+    Game.context.fillText("Zabici wrogowie: "+Game.player.kills,210,540);
+    Game.context.fillText("Obecny rekord: "+getCookie('rekord'),210,565);
+}
+
+Game.drawPause = function() {
+    Game.context.fillStyle = "#555";
+    Game.context.fillRect(0, 0, Game.width, Game.height);
+    Game.context.font = "60px Arial";
+    Game.context.fillStyle = "darkred";
+    Game.context.fillText("Gra wstrzymana!",200,500);
+    Game.context.font = "20px Arial";
+    Game.context.fillStyle = "white";
+    Game.context.fillText("Naciśnij [ESC] by kontynuować",210,540);
 }
 
 Game.update = function() {
     
-    document.onmousemove=function(e){cursorX=(e=e||event).clientX;cursorY=e.clientY}
+    document.onmousemove=function(e){cursorX=(e=e||event).clientX;cursorY=e.clientY} 
     
     // Gracz
     Game.player.update();
-    
+
     // Zgon gracza
     if(this.player.hp <= 0 && this.player.dead == false) {
         this.player.dead = true;
         Game.endGame = true;
     }
-    
+
     // Wrogowie
     for(var i = 0; i<this.enemies.length; i++) {
-        
+
         Game.enemies[i].update();
-        
+
         // Jeśli umarł
         if(Game.enemies[i].hp <= 0) {
             delete Game.enemies[i];
             Game.enemies.splice(i,1);
-            Game.score++;
+            this.player.kills++;
         }
     }
-    
+
     // Tworzenie wrogów
-    
+
     if(Game.enemies.length == 0){
         for(var i = 0; i<this.wave; i++) Game.enemies[i] = new Mob(i, 'Albert');
         this.wave++;

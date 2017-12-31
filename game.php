@@ -33,7 +33,10 @@
         
         <div class="asidearea">
             <div class="asideinfo"></div>
-            <div class="map"></div>
+            <div class="map">
+                <h3 id="kills">50</h3>
+                <p>Zabici wrogowie</p>
+            </div>
         </div>
         
         <div class="skillbar">
@@ -53,6 +56,7 @@
         </div>
         
         <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+        <script type="text/javascript" src="js/functions.js?<?php echo $rand; ?>"></script>
         <script type="text/javascript" src="js/core.js?<?php echo $rand; ?>"></script>
         <script type="text/javascript" src="js/player.js?<?php echo $rand; ?>"></script>
         <script type="text/javascript" src="js/weapon.js?<?php echo $rand; ?>"></script>

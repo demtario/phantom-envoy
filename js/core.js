@@ -1,14 +1,14 @@
-$( document ).ready(function() {
+$(document).ready(function () {
     Game.start();
 });
 
-var reloadSound = new Audio("music/reload.wav");
-var shotSound = new Audio("music/shot2.wav");
-var shot2Sound = new Audio("music/shot2.wav");
-var emptySound = new Audio("music/empty.wav");
+let reloadSound = new Audio("music/reload.wav");
+let shotSound = new Audio("music/shot2.wav");
+let shot2Sound = new Audio("music/shot2.wav");
+let emptySound = new Audio("music/empty.wav");
 
 // Poruszanie się
-var Key = {
+let Key = {
     _pressed: {},
 
     LEFT: 37,
@@ -40,18 +40,18 @@ window.addEventListener('keyup', function(event) { Key.onKeyup(event); }, false)
 window.addEventListener('keydown', function(event) { Key.onKeydown(event); }, false);
 
 // Wykrywanie przycisków
-var mouseDown=false;
+let mouseDown=false;
 window.addEventListener('mousedown', function() { mouseDown=true }, false);
 window.addEventListener('mouseup', function() { mouseDown=false }, false);
 
-var nowClicked;
+let nowClicked;
 document.addEventListener('keydown', function(e) { nowClicked = e.keyCode; });
 
-var scrolling;
+let scrolling;
 window.addEventListener('mousewheel', function(e) { scrolling=true; });
 
 //Obiekt gra
-var Game = {
+let Game = {
     fps: 60,
     width: window.innerWidth,
     height: window.innerHeight,
@@ -61,11 +61,11 @@ var Game = {
 };
 
 Game._onEachFrame = (function() {
-    var requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame;
+    let requestAnimationFrame = window.requestAnimationFrame || window.webkitRequestAnimationFrame || window.mozRequestAnimationFrame;
     
     if (requestAnimationFrame) {
         return function(cb) {
-            var _cb = function() { cb(); requestAnimationFrame(_cb); }
+            let _cb = function() { cb(); requestAnimationFrame(_cb); }
             _cb();
         };
     } else {
@@ -96,7 +96,7 @@ Game.start = function() {
 }
 
 Game.run = (function() {
-    var loops = 0, skipTicks = 1000 / Game.fps,
+    let loops = 0, skipTicks = 1000 / Game.fps,
         maxFrameSkip = 10,
         nextGameTick = (new Date).getTime(),
         lastGameTick;
@@ -140,7 +140,7 @@ Game.draw = function() {
     Game.player.draw(Game.context);
     
     // Rysuje wrogów
-    for(var i = 0; i<this.enemies.length; i++) Game.enemies[i].draw(Game.context);
+    for(let i = 0; i<this.enemies.length; i++) Game.enemies[i].draw(Game.context);
 };
 
 Game.drawEnd = function() {
@@ -183,7 +183,7 @@ Game.update = function() {
     }
 
     // Wrogowie
-    for(var i = 0; i<this.enemies.length; i++) {
+    for(let i = 0; i<this.enemies.length; i++) {
 
         Game.enemies[i].update();
 
@@ -198,7 +198,7 @@ Game.update = function() {
     // Tworzenie wrogów
 
     if(Game.enemies.length == 0){
-        for(var i = 0; i<this.wave; i++) Game.enemies[i] = new Mob(i, 'Albert');
+        for(let i = 0; i<this.wave; i++) Game.enemies[i] = new Mob(i, 'Albert');
         this.wave++;
     }
         

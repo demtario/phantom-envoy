@@ -1,154 +1,249 @@
-function Player(name) {
-    this.name = name;
-    
-    this.x = Game.width/2;
-    this.y = Game.height/2;
-    this.angle;
-    this.moveSpeed = 120; // px/s
-    
-    this.hp = 1000;
-    this.maxHp = 1000;
-    this.dead = false;
-    
-    this.mana = 600;
-    this.maxMana = 1400;
-    
-    this.kills = 0;
-    
-    this.reloading = false;
-    
-    this.primaryWeapon = new Weapon('AK-47', 30, 650, 3500, 1200, 18, 25, '#333');
-    this.secondaryWeapon = new Weapon('P90', 50, 900, 3000, 840, 11, 20, '#169');
-    
-    this.weapon = this.primaryWeapon;
-    
-    this.bullets = [];
-}
+class Player {
+    constructor(name) {
+        this.name = name;
 
-Player.prototype.draw = function(context) {
-    
-    for(var i = 0; i < this.bullets.length; i++) this.bullets[i].init(context);
-    
-    context.save();
-    context.translate(this.x, this.y);
-    context.rotate(this.angle * Math.PI/180);
-    
-    context.beginPath();
-    context.fillStyle='#CCBAAC';
-    context.moveTo(10, -15);
-    context.lineTo(10, 15);
-    context.lineTo(36, 0);
-    context.fill();
-    context.closePath();
-    
-    context.fillStyle='#260';
-    context.fillRect(-10, -30, 20, 60);
-    
-    context.fillStyle = this.weapon.color;
-    context.fillRect(24, -4, 20, 8);
-    
-    context.beginPath();
-    context.fillStyle = 'saddlebrown';
-    context.arc(0,0,20,0,2*Math.PI);
-    context.fill();
-    context.closePath();
-    
-    context.restore();
-    
-}
+        this.x = Game.width/2;
+        this.y = Game.height/2;
+        this.angle;
+        this.moveSpeed = 120; // px/s
 
-Player.prototype.update = function() {
+        this.maxHp = 1000;
+        this.hp = this.maxHp;
+        this.dead = false;
+
+        this.maxMana = 1400;
+        this.mana = this.maxMana;
+
+        this.kills = 0;
+
+        this.reloading = false;
+
+        this.primaryWeapon = new Weapon('AK-47', 30, 650, 3500, 1200, 18, 25, 4, '#333');
+        this.secondaryWeapon = new Weapon('P90', 50, 900, 3000, 840, 11, 20, 8, '#169');
+
+        this.weapon = this.primaryWeapon;
+
+        this.bullets = [];
+    }
     
-    // Poruszanie się
-    if(Key.isDown(Key.UP) || Key.isDown(Key.W)) this.moveUp();
-    if(Key.isDown(Key.LEFT) || Key.isDown(Key.A)) this.moveLeft();
-    if(Key.isDown(Key.DOWN) || Key.isDown(Key.S)) this.moveDown();
-    if(Key.isDown(Key.RIGHT) || Key.isDown(Key.D)) this.moveRight();
+    draw(context) {
+        for(var i = 0; i < this.bullets.length; i++) this.bullets[i].init(context);
     
-    //Strzelanie
-    if(mouseDown) this.shoot();
+        context.save();
+        context.translate(this.x, this.y);
+        context.rotate(this.angle * Math.PI/180);
+
+        context.beginPath();
+        context.fillStyle='#CCBAAC';
+        context.moveTo(10, -15);
+        context.lineTo(10, 15);
+        context.lineTo(36, 0);
+        context.fill();
+        context.closePath();
+
+        context.fillStyle='#260';
+        context.fillRect(-10, -30, 20, 60);
+
+        context.fillStyle = this.weapon.color;
+        context.fillRect(24, -4, 20, 8);
+
+        context.beginPath();
+        context.fillStyle = 'saddlebrown';
+        context.arc(0,0,20,0,2*Math.PI);
+        context.fill();
+        context.closePath();
+
+        context.restore();
+    }
     
-    //Kontrola pocisków
-    for(var i = 0; i < this.bullets.length; i++) {
-        
-        //sprawdza czy pocisk wyleciał poza planszę
-        if(this.bullets[i].currX > Game.width+20 || this.bullets[i].currX < -20 || this.bullets[i].currY > Game.height+20 || this.bullets[i].currY < -20) {
-            this.bullets[i].shallBeDestroyed = true;
+    update() {
+        // Poruszanie się
+        if(Key.isDown(Key.UP) || Key.isDown(Key.W)) this.moveUp();
+        if(Key.isDown(Key.LEFT) || Key.isDown(Key.A)) this.moveLeft();
+        if(Key.isDown(Key.DOWN) || Key.isDown(Key.S)) this.moveDown();
+        if(Key.isDown(Key.RIGHT) || Key.isDown(Key.D)) this.moveRight();
+
+        //Strzelanie
+        if(mouseDown) this.shoot();
+
+        //Kontrola pocisków
+        for(var i = 0; i < this.bullets.length; i++) {
+
+            //sprawdza czy pocisk wyleciał poza planszę
+            if(this.bullets[i].currX > Game.width+20 || this.bullets[i].currX < -20 || this.bullets[i].currY > Game.height+20 || this.bullets[i].currY < -20) {
+                this.bullets[i].shallBeDestroyed = true;
+            }
+
+            this.bullets[i].move();
+
+            // usuwa pocisk jeśli powinien zostać zniszczony
+            if(this.bullets[i].shallBeDestroyed) {
+                delete this.bullets[i];
+                this.bullets.splice(i,1);
+            }
+
         }
-        
-        this.bullets[i].move();
-        
-        // usuwa pocisk jeśli powinien zostać zniszczony
-        if(this.bullets[i].shallBeDestroyed) {
-            delete this.bullets[i];
-            this.bullets.splice(i,1);
+
+        //Przeładowanie
+        if(nowClicked == 82) {
+            this.reloadWeapon();
+            nowClicked = 'r';
         }
-        
+
+        //Zmiana broni
+        if(nowClicked == 69 || scrolling == true) {
+            this.switchWeapon();
+            nowClicked = 'e';
+            scrolling = false;
+        }
+
+        //Sprint
+        if(Key.isDown(Key.SHIFT) && !this.reloading) {
+            this.speedModifier = 1.2;
+            this.sprint = true;
+        }
+        else if(this.reloading) {
+            this.sprint = false;
+        } else {
+            this.speedModifier = 1;
+            this.sprint = false;
+        }
+
+        // Aktualizacja GUI
+
+        document.getElementById("username").innerHTML = this.name;
+
+        $('#life-bar').css('width', (this.hp/this.maxHp)*100+'%');
+        $('#life-info').html(this.hp+'/'+this.maxHp);
+
+        $('#mana-bar').css('width', (this.mana/this.maxMana)*100+'%');
+        $('#mana-info').html(this.mana+'/'+this.maxMana);
+
+        document.getElementById("kills").innerHTML = this.kills;
+
+        document.getElementById("gun-mag").innerHTML = this.weapon.mag;
+        document.getElementById("gun-ammo").innerHTML = this.weapon.ammo;
+        document.getElementById("gun-name").innerHTML = this.weapon.name;
+
+        // Kąt obrotu
+        this.angle = Math.atan2(cursorX - this.x, - (cursorY - this.y) )*(180/Math.PI) - 90;
     }
     
-    //Przeładowanie
-    if(nowClicked == 82) {
-        this.reloadWeapon();
-        nowClicked = 'r';
-    } 
-    
-    //Zmiana broni
-    if(nowClicked == 69 || scrolling == true) {
-        this.switchWeapon();
-        nowClicked = 'e';
-        scrolling = false;
+    moveLeft() {
+        if(this.x > 20) this.x -= this.moveSpeed/Game.fps*this.speedModifier;
     }
     
-    //Sprint
-    if(Key.isDown(Key.SHIFT) && !this.reloading) {
-        this.speedModifier = 1.2;
-        this.sprint = true;
-    }
-    else if(this.reloading) {
-        this.sprint = false;
-    } else {
-        this.speedModifier = 1;
-        this.sprint = false;
+    moveRight() {
+        if(this.x < Game.width - 20) this.x += this.moveSpeed/Game.fps*this.speedModifier;
     }
     
-    // Aktualizacja GUI
+    moveUp() {
+        if(this.y > 20) this.y -= this.moveSpeed/Game.fps*this.speedModifier;
+    }
     
-    document.getElementById("username").innerHTML = this.name;
+    moveDown() {
+        if(this.y < Game.height - 20) this.y += this.moveSpeed/Game.fps*this.speedModifier;
+    }
     
-    $('#life-bar').css('width', (this.hp/this.maxHp)*100+'%');
-    $('#life-info').html(this.hp+'/'+this.maxHp);
-    
-    $('#mana-bar').css('width', (this.mana/this.maxMana)*100+'%');
-    $('#mana-info').html(this.mana+'/'+this.maxMana);
-    
-    document.getElementById("kills").innerHTML = this.kills;
-    
-    document.getElementById("gun-mag").innerHTML = this.weapon.mag;
-    document.getElementById("gun-ammo").innerHTML = this.weapon.ammo;
-    document.getElementById("gun-name").innerHTML = this.weapon.name;
-    
-    // Kąt obrotu
-    this.angle = Math.atan2(cursorX - this.x, - (cursorY - this.y) )*(180/Math.PI) - 90;
-    
-}
+    shoot() {
+        if(this.weapon.mag > 0 && !this.sprint) {
 
-Player.prototype.moveLeft = function() {
-    if(this.x > 20) this.x -= this.moveSpeed/Game.fps*this.speedModifier;
-}
+            if(!this.reloading) {
 
-Player.prototype.moveRight = function() {
-    if(this.x < Game.width - 20) this.x += this.moveSpeed/Game.fps*this.speedModifier;
-}
+                if(!this.weapon.delay) {
 
-Player.prototype.moveUp = function() {
-    if(this.y > 20) this.y -= this.moveSpeed/Game.fps*this.speedModifier;
-}
+                    // Strzal
+                    let damageRand = Math.floor(Math.random()*(this.weapon.damage[1]-this.weapon.damage[0]+1)+this.weapon.damage[1]);
 
-Player.prototype.moveDown = function() {
-    if(this.y < Game.height - 20) this.y += this.moveSpeed/Game.fps*this.speedModifier;
-} 
+                    let dispersion = (this.angle+(Math.round(Math.random()*this.weapon.dispersion)-(this.weapon.dispersion/2))+90) * Math.PI/180;
 
-Player.prototype.hurt = function(ile) {
-    this.hp -= ile;
+                    let newBullet = new Bullet(this.bullets.length, this.x, this.y, this.weapon.bulletVelocity, dispersion, damageRand, this);
+                    this.bullets.push(newBullet);
+
+                    this.weapon.mag--;
+
+                    if(Game.sound) shot2Sound.play();
+
+                    this.weapon.delay = true;
+                    let currThis = this;
+
+                    setTimeout(function() { resetDelay(currThis); }, this.weapon.fireRate);
+
+                    function resetDelay(THIS) {
+                        THIS.weapon.delay = false;
+                    }
+
+                }
+            } else {
+
+                clearTimeout(this.reloadTimeout);
+                document.getElementById("gun-reloading-bar").style.transition = "0s";
+                document.getElementById("gun-reloading-bar").style.width = "0";
+                this.reloading = false;
+                this.shoot();
+
+            }
+        } else {
+            //brak pocisków w magazynku
+            if(Game.sound) emptySound.play();
+        }
+    }
+    
+    switchWeapon() {
+        if(this.weapon == this.primaryWeapon) this.weapon = this.secondaryWeapon;
+        else this.weapon = this.primaryWeapon;
+
+        clearTimeout(this.reloadTimeout);
+        document.getElementById("gun-reloading-bar").style.transition = "0s";
+        document.getElementById("gun-reloading-bar").style.width = "0";
+        this.reloading = false;
+        this.weapon.delay = false;
+    }
+    
+    reloadWeapon() {
+        if(this.reloading == false && this.speedModifier==1) {
+
+            if(this.weapon.ammo > 0 && this.weapon.mag < this.weapon.magSize) {
+
+                this.reloading = true;
+                document.getElementById("gun-reloading-bar").style.transition = this.weapon.reloadTime/1000 + "s linear";
+                document.getElementById("gun-reloading-bar").style.width = "100%";
+                var oldSpeed = this.moveSpeed;
+                this.speedModifier = 1/2;
+
+                let currThis = this;
+
+                this.reloadTimeout = setTimeout(function() { relo(currThis); }, this.weapon.reloadTime);
+
+                let relo = function(play) {
+
+                    if(play.weapon.mag > 0) {
+
+                       play.weapon.ammo += play.weapon.mag;
+                       play.weapon.mag = 0;
+
+                    }
+
+                    play.weapon.mag = play.weapon.ammo >= play.weapon.magSize ? play.weapon.magSize : play.weapon.ammo;
+                    play.weapon.ammo -= play.weapon.mag;
+                    play.reloading = false;
+
+                    play.speedModifier = 1;
+                    document.getElementById("gun-reloading-bar").style.transition = "0s";
+                    document.getElementById("gun-reloading-bar").style.width = "0";
+
+                    if(Game.sound) reloadSound.play();
+                }
+
+            } else {
+                //brak ammo lub pelen magazynek
+            }
+        }
+    }
+
+    hurt(ile) {
+        this.hp -= ile;
+    }
+
 }
 

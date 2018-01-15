@@ -56,6 +56,8 @@
         </div>
         
         <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+
         <script type="text/javascript" src="js/functions.js?<?php echo $rand; ?>"></script>
         <script type="text/javascript" src="js/core.js?<?php echo $rand; ?>"></script>
         <script type="text/javascript" src="js/player.js?<?php echo $rand; ?>"></script>

@@ -79,6 +79,7 @@ var cursorX, cursorY;
 
 Game.start = function() {
     
+    // Plansza
     Game.canvas = document.createElement("canvas");
     Game.canvas.width = Game.width;
     Game.canvas.height = Game.height;
@@ -87,11 +88,25 @@ Game.start = function() {
     
     document.body.appendChild(Game.canvas);
     
-    Game.player = new Player('Jonas Skarabeusz');
+    // Świat
+    Game.world = new Map(4000,4000);
+    this.world.generate();
     
+    // Gracz
+    Game.player = new Player('Jonas Skarabeusz', Game.world.width/2, Game.world.height/2);
+
+    // Jego Kamera
+    this.camera = new Camera(0, 0, Game.width, Game.height, Game.world.width, Game.world.height);
+    Game.camera.follow(Game.player, Game.width/2, Game.height/2);
+
+    // Wrogowie
     this.enemies = [];
     this.wave = 1;
     
+    // Powerupy
+    this.ammoPacks = [];
+
+    // Let's go
     Game._onEachFrame(Game.run);
 }
 
@@ -136,13 +151,20 @@ Game.draw = function() {
     // Czyści plansze
     Game.context.clearRect(0, 0, Game.width, Game.height);
     
+    //Rysuje mapę
+    Game.world.draw(Game.context,Game.camera.xView,Game.camera.yView);
+
+    // Rysuje ammo
+    for(let i = 0; i<this.ammoPacks.length; i++) Game.ammoPacks[i].draw(Game.context);
+
     // Rysuje gracza
-    Game.player.draw(Game.context);
+    Game.player.draw(Game.context,Game.camera.xView,Game.camera.yView);
     
     // Rysuje wrogów
     for(let i = 0; i<this.enemies.length; i++) Game.enemies[i].draw(Game.context);
 };
 
+// GameOver
 Game.drawEnd = function() {
     
     if(this.player.kills>getCookie('rekord')) setCookie('rekord',Game.player.kills);
@@ -158,6 +180,7 @@ Game.drawEnd = function() {
     Game.context.fillText("Obecny rekord: "+getCookie('rekord'),210,565);
 }
 
+// Pauza
 Game.drawPause = function() {
     Game.context.fillStyle = "#555";
     Game.context.fillRect(0, 0, Game.width, Game.height);
@@ -173,6 +196,9 @@ Game.update = function() {
     
     document.onmousemove=function(e){cursorX=(e=e||event).clientX;cursorY=e.clientY} 
     
+    // Kamera
+    Game.camera.update();
+
     // Gracz
     Game.player.update();
 
@@ -180,6 +206,12 @@ Game.update = function() {
     if(this.player.hp <= 0 && this.player.dead == false) {
         this.player.dead = true;
         Game.endGame = true;
+    }
+
+    // Tworzenie wrogów
+    if(Game.enemies.length == 0){
+        for(let i = 0; i<this.wave; i++) Game.enemies[i] = new Mob(i, 'Albert');
+        this.wave++;
     }
 
     // Wrogowie
@@ -195,11 +227,24 @@ Game.update = function() {
         }
     }
 
-    // Tworzenie wrogów
+    // Tworzenie AmmoPacków i HealtPacków
+    if(Game.ammoPacks.length == 0){
+        for(let i = 0; i<this.wave; i+=2) {
+            Game.ammoPacks[i] = new AmmoPack(i,50);
+            Game.ammoPacks[i+1] = new HealthPack(i,50);
+        }
+    }
 
-    if(Game.enemies.length == 0){
-        for(let i = 0; i<this.wave; i++) Game.enemies[i] = new Mob(i, 'Albert');
-        this.wave++;
+    // AmmoPack'i i HealtPack'i
+    for(let i = 0; i<this.ammoPacks.length; i++) {
+
+        Game.ammoPacks[i].update();
+
+        // Jeśli wypełnił przeznaczenie
+        if(Game.ammoPacks[i].shallBeDestroyed) {
+            delete Game.ammoPacks[i];
+            Game.ammoPacks.splice(i,1);
+        }
     }
         
 };

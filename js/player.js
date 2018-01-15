@@ -1,9 +1,9 @@
 class Player {
-    constructor(name) {
+    constructor(name, startX, startY) {
         this.name = name;
 
-        this.x = Game.width/2;
-        this.y = Game.height/2;
+        this.x = startX;
+        this.y = startY;
         this.angle;
         this.moveSpeed = 120; // px/s
 
@@ -26,11 +26,11 @@ class Player {
         this.bullets = [];
     }
     
-    draw(context) {
+    draw(context, xView, yView) {
         for(var i = 0; i < this.bullets.length; i++) this.bullets[i].init(context);
     
         context.save();
-        context.translate(this.x, this.y);
+        context.translate(this.x - xView, this.y - yView);
         context.rotate(this.angle * Math.PI/180);
 
         context.beginPath();
@@ -69,8 +69,8 @@ class Player {
         //Kontrola pocisków
         for(var i = 0; i < this.bullets.length; i++) {
 
-            //sprawdza czy pocisk wyleciał poza planszę
-            if(this.bullets[i].currX > Game.width+20 || this.bullets[i].currX < -20 || this.bullets[i].currY > Game.height+20 || this.bullets[i].currY < -20) {
+            //sprawdza czy pocisk wyleciał poza świat
+            if(this.bullets[i].currX > Game.world.width+20 || this.bullets[i].currX < -20 || this.bullets[i].currY > Game.world.height+20 || this.bullets[i].currY < -20) {
                 this.bullets[i].shallBeDestroyed = true;
             }
 
@@ -99,7 +99,7 @@ class Player {
 
         //Sprint
         if(Key.isDown(Key.SHIFT) && !this.reloading) {
-            this.speedModifier = 1.2;
+            this.speedModifier = 1.4;
             this.sprint = true;
         }
         else if(this.reloading) {
@@ -126,7 +126,7 @@ class Player {
         document.getElementById("gun-name").innerHTML = this.weapon.name;
 
         // Kąt obrotu
-        this.angle = Math.atan2(cursorX - this.x, - (cursorY - this.y) )*(180/Math.PI) - 90;
+        this.angle = Math.atan2(cursorX - this.x + Game.camera.xView, - (cursorY - this.y + Game.camera.yView) )*(180/Math.PI) - 90;
     }
     
     moveLeft() {
@@ -134,7 +134,7 @@ class Player {
     }
     
     moveRight() {
-        if(this.x < Game.width - 20) this.x += this.moveSpeed/Game.fps*this.speedModifier;
+        if(this.x < Game.world.width - 20) this.x += this.moveSpeed/Game.fps*this.speedModifier;
     }
     
     moveUp() {
@@ -142,7 +142,7 @@ class Player {
     }
     
     moveDown() {
-        if(this.y < Game.height - 20) this.y += this.moveSpeed/Game.fps*this.speedModifier;
+        if(this.y < Game.world.height - 20) this.y += this.moveSpeed/Game.fps*this.speedModifier;
     }
     
     shoot() {

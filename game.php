@@ -60,8 +60,11 @@
 
         <script type="text/javascript" src="js/functions.js?<?php echo $rand; ?>"></script>
         <script type="text/javascript" src="js/core.js?<?php echo $rand; ?>"></script>
+        <script type="text/javascript" src="js/camera.js?<?php echo $rand; ?>"></script>
+        <script type="text/javascript" src="js/map.js?<?php echo $rand; ?>"></script>
         <script type="text/javascript" src="js/player.js?<?php echo $rand; ?>"></script>
-        <script type="text/javascript" src="js/weapon.js?<?php echo $rand; ?>"></script>
         <script type="text/javascript" src="js/enemy.js?<?php echo $rand; ?>"></script>
+        <script type="text/javascript" src="js/weapon.js?<?php echo $rand; ?>"></script>
+        <script type="text/javascript" src="js/powerup.js?<?php echo $rand; ?>"></script>
     </body>
 </html>

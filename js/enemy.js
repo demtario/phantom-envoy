@@ -3,10 +3,10 @@ class Mob {
         this.index = index;
 
         this.name = name;
-        this.x = Math.round(Math.random()*Game.width);
-        this.y = Math.round(Math.random()*Game.height);
+        this.x = Math.round(Math.random()*Game.width) + Game.camera.xView;
+        this.y = Math.round(Math.random()*Game.height) + Game.camera.yView;
         this.angle = 0;
-        this.moveSpeed = 120; // px/s
+        this.moveSpeed = 140; // px/s
 
         this.attackSpeed = 2; // ciosy na sekunde
         this.damage = 20;
@@ -19,7 +19,7 @@ class Mob {
     
     draw(context) {
         context.save();
-        context.translate(this.x, this.y);
+        context.translate(this.x - Game.camera.xView, this.y - Game.camera.yView);
 
         context.font = "20px Arial";
         context.fillStyle = "white";

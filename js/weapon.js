@@ -38,7 +38,7 @@ class Bullet {
     init(context) {
         context.beginPath();
         context.fillStyle = 'gold';
-        context.arc(this.currX, this.currY, 2, 0, 2*Math.PI);
+        context.arc(this.currX - Game.camera.xView, this.currY - Game.camera.yView, 2, 0, 2*Math.PI);
         context.fill();
         context.closePath();
     }

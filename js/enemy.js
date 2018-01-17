@@ -1,6 +1,8 @@
 class Mob {
-    constructor (index, name) {
+    constructor (index, parent, container, name) {
         this.index = index;
+        this.parent = parent;
+        this.container = container;
 
         this.name = name;
         this.x = Math.round(Math.random()*Game.width) + Game.camera.xView;
@@ -13,8 +15,8 @@ class Mob {
         this.attackRange = 45; // kwadrat o daną odległość od centrum mobka
         this.attackDelay = false;
 
-        this.hp = 500;
-        this.maxHp = 1000;
+        this.maxHp = 600;
+        this.hp = this.maxHp;
     }
     
     draw(context) {
@@ -40,7 +42,10 @@ class Mob {
         context.restore();
     }
     
-    update() {
+    update(newIndex) {
+
+        this.index = newIndex;
+
         // Kąt obrotu
         this.angle = Math.atan2(Game.player.x - this.x, - (Game.player.y - this.y) )*(180/Math.PI) - 90;
 
@@ -54,6 +59,12 @@ class Mob {
         // Atak gracza
         if(this.x+this.attackRange > Game.player.x && this.x-this.attackRange < Game.player.x)
             if(this.y+this.attackRange > Game.player.y && this.y-this.attackRange < Game.player.y) this.attack(Game.player);
+
+        // Śmierć
+        if(this.hp <= 0) {
+            this.parent.player.kills++;
+            this.delete();
+        }
     }
     
     moveLeft() {
@@ -89,5 +100,10 @@ class Mob {
                 THIS.attackDelay = false;
             }
         }
+    }
+
+    delete() {
+        this.container.splice(this.index,1);
+        delete this;
     }
 }

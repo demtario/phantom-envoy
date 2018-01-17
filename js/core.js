@@ -196,54 +196,32 @@ Game.update = function() {
     
     document.onmousemove=function(e){cursorX=(e=e||event).clientX;cursorY=e.clientY} 
     
-    // Kamera
-    Game.camera.update();
+    //// UPDATE'Y
 
-    // Gracz
-    Game.player.update();
+    Game.camera.update(); // Kamera
 
-    // Zgon gracza
-    if(this.player.hp <= 0 && this.player.dead == false) {
+    Game.player.update(); // Gracz
+
+    for(let i = 0; i<this.enemies.length; i++) Game.enemies[i].update(i); // Wrogowie
+
+    for(let i = 0; i<this.ammoPacks.length; i++) Game.ammoPacks[i].update(i); // AmmoPack'i i HealtPack'i
+
+    if(this.player.hp <= 0 && this.player.dead == false) { // Zgon gracza
         this.player.dead = true;
         Game.endGame = true;
     }
 
-    // Tworzenie wrogów
-    if(Game.enemies.length == 0){
-        for(let i = 0; i<this.wave; i++) Game.enemies[i] = new Mob(i, 'Albert');
+    //// GENERACJA OBIEKTÓW
+
+    if(Game.enemies.length == 0){ // Tworzenie wrogów
+        for(let i = 0; i<this.wave; i++) Game.enemies[i] = new Mob(i, Game, Game.enemies,'Albert');
         this.wave++;
     }
 
-    // Wrogowie
-    for(let i = 0; i<this.enemies.length; i++) {
-
-        Game.enemies[i].update();
-
-        // Jeśli umarł
-        if(Game.enemies[i].hp <= 0) {
-            delete Game.enemies[i];
-            Game.enemies.splice(i,1);
-            this.player.kills++;
-        }
-    }
-
-    // Tworzenie AmmoPacków i HealtPacków
-    if(Game.ammoPacks.length == 0){
+    if(Game.ammoPacks.length == 0){ // Tworzenie AmmoPacków i HealtPacków
         for(let i = 0; i<this.wave; i+=2) {
-            Game.ammoPacks[i] = new AmmoPack(i,50);
-            Game.ammoPacks[i+1] = new HealthPack(i,50);
-        }
-    }
-
-    // AmmoPack'i i HealtPack'i
-    for(let i = 0; i<this.ammoPacks.length; i++) {
-
-        Game.ammoPacks[i].update();
-
-        // Jeśli wypełnił przeznaczenie
-        if(Game.ammoPacks[i].shallBeDestroyed) {
-            delete Game.ammoPacks[i];
-            Game.ammoPacks.splice(i,1);
+            Game.ammoPacks[i] = new AmmoPack(i, Game.ammoPacks, 50);
+            Game.ammoPacks[i+1] = new HealthPack(i+1, Game.ammoPacks, 50);
         }
     }
         

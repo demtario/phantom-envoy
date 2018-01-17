@@ -27,8 +27,10 @@ class Player {
     }
     
     draw(context, xView, yView) {
+        // Pociski
         for(var i = 0; i < this.bullets.length; i++) this.bullets[i].init(context);
     
+        // Postać
         context.save();
         context.translate(this.x - xView, this.y - yView);
         context.rotate(this.angle * Math.PI/180);
@@ -63,25 +65,12 @@ class Player {
         if(Key.isDown(Key.DOWN) || Key.isDown(Key.S)) this.moveDown();
         if(Key.isDown(Key.RIGHT) || Key.isDown(Key.D)) this.moveRight();
 
-        //Strzelanie
+        // Strzelanie
         if(mouseDown) this.shoot();
 
-        //Kontrola pocisków
+        // Pociski
         for(var i = 0; i < this.bullets.length; i++) {
-
-            //sprawdza czy pocisk wyleciał poza świat
-            if(this.bullets[i].currX > Game.world.width+20 || this.bullets[i].currX < -20 || this.bullets[i].currY > Game.world.height+20 || this.bullets[i].currY < -20) {
-                this.bullets[i].shallBeDestroyed = true;
-            }
-
-            this.bullets[i].move();
-
-            // usuwa pocisk jeśli powinien zostać zniszczony
-            if(this.bullets[i].shallBeDestroyed) {
-                delete this.bullets[i];
-                this.bullets.splice(i,1);
-            }
-
+            this.bullets[i].update(i);
         }
 
         //Przeładowanie
@@ -157,7 +146,7 @@ class Player {
 
                     let dispersion = (this.angle+(Math.round(Math.random()*this.weapon.dispersion)-(this.weapon.dispersion/2))+90) * Math.PI/180;
 
-                    let newBullet = new Bullet(this.bullets.length, this.x, this.y, this.weapon.bulletVelocity, dispersion, damageRand, this);
+                    let newBullet = new Bullet(this.bullets.length, this.x, this.y, this.weapon.bulletVelocity, dispersion, damageRand, this, this.bullets);
                     this.bullets.push(newBullet);
 
                     this.weapon.mag--;

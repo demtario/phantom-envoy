@@ -20,9 +20,10 @@ class Weapon {
 }
 
 class Bullet {
-    constructor(index, sourceX, sourceY, speed, angle, damage, parent) {
+    constructor(index, sourceX, sourceY, speed, angle, damage, parent, container) {
         this.index = index;
         this.parent = parent;
+        this.container = container;
 
         this.currX = sourceX;
         this.currY = sourceY;
@@ -43,18 +44,34 @@ class Bullet {
         context.closePath();
     }
     
-    move() {
-        var vx = this.speed/30 * Math.cos(this.angle-(Math.PI/2));
-		var vy = this.speed/30 * Math.sin(this.angle-(Math.PI/2));
+    update(newIndex) {
+
+        this.index = newIndex;
+
+        // przemieszczenie pocisku
+        let vx = this.speed/30 * Math.cos(this.angle-(Math.PI/2));
+		let vy = this.speed/30 * Math.sin(this.angle-(Math.PI/2));
 
 		this.currX += vx;
 		this.currY += vy;	
         
-        for(var i = 0; i < Game.enemies.length; i++){
-            
-             if(this.currX+30 > Game.enemies[i].x && this.currX-30 < Game.enemies[i].x)
-                if(this.currY+30 > Game.enemies[i].y && this.currY-30 < Game.enemies[i].y) this.dealDamage(Game.enemies[i]);
+        // delecja pocisków poza światem
+        if(this.currX > Game.world.width+20 || this.currX < -20 || this.currY > Game.world.height+20 || this.currY < -20) {
+            this.container.splice(this.index,1);
+            delete this;
         }
+
+        // zadanie obrażeń
+        for(var i = 0; i < Game.enemies.length; i++){
+             if(this.currX+30 > Game.enemies[i].x && this.currX-30 < Game.enemies[i].x)
+                if(this.currY+30 > Game.enemies[i].y && this.currY-30 < Game.enemies[i].y) {
+
+                    this.dealDamage(Game.enemies[i]);
+                    this.delete();
+
+                }
+        }
+
     }
     
     dealDamage(target) {
@@ -62,5 +79,10 @@ class Bullet {
             target.hurt(this.damage);
             this.shallBeDestroyed = true;
         }
+    }
+
+    delete() {
+        this.container.splice(this.index,1);
+        delete this;
     }
 }

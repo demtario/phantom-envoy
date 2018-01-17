@@ -1,6 +1,7 @@
 class Powerup {
-    constructor(index) {
+    constructor(index, container) {
         this.index = index;
+        this.container = container;
         this.color = 'yellow';
 
         this.x = Math.round(Math.random()*Game.width) + Game.camera.xView;
@@ -25,25 +26,38 @@ class Powerup {
         context.restore();
     }
 
-    update() {
+    update(newIndex) {
+
+        this.index = newIndex;
+
         //Jeśli kolizja
         if(this.x+10+this.width/2 > Game.player.x && this.x-10-this.width/2 < Game.player.x)
                 if(this.y+10+this.width/2 > Game.player.y && this.y-10-this.width/2 < Game.player.y) {
-                    this.shallBeDestroyed = true;
+
+                    // Działanie
                     this.doSomething(Game.player);
+
+                    // Zniszczenie
+                    this.delete();
                 }
     }
 
+    delete() {
+        this.container.splice(this.index,1);
+        delete this;
+    }
+
     doSomething(target) {
-        console.log('elo');
+        console.log('jeszcze nic nie robię');
     }
 }
 
 class AmmoPack extends Powerup {
 
-    constructor(index, howMany) {
+    constructor(index, container, howMany) {
         super();
 
+        this.container = container;
         this.howMany = howMany;
         this.color = '#ff9900';
     }
@@ -56,9 +70,10 @@ class AmmoPack extends Powerup {
 
 class HealthPack extends Powerup {
 
-    constructor(index, howMany) {
+    constructor(index, container, howMany) {
         super();
 
+        this.container = container;
         this.howMany = howMany;
         this.color = 'darkred';
     }

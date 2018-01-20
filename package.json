@@ -1,0 +1,12 @@
+{
+    "name": "pe-room",
+    "version": "0.0.1",
+    "description": "Phantom Envoy Server",
+    "main": "app.js",
+    "author": "HESEYA",
+    "homepage": "https://testy.heseya.com/pe",
+    "dependencies": {
+        "express": "^4.15.2",
+        "socket.io": "^2.0.4"
+    }
+}

@@ -45,6 +45,16 @@ body
     font-style: italic;
 }
 
+input
+{
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    border: 0;
+    outline: 0;
+    margin: 0 auto;
+}
+
 .char
 {
     width: 100%;
@@ -94,7 +104,7 @@ body
     color: #ddd;
 }
 
-a.button
+.button
 {
     display: block;
     width: 120px;
@@ -106,9 +116,12 @@ a.button
     background-color: #A63640;
     border-radius: 10px;
     transition: 0.3s;
+    border: 0;
+    cursor: pointer;
+    outline: 0;
 }
 
-a.button:hover
+.button:hover
 {
     background-color: #952530;
 }

@@ -215,7 +215,7 @@ Game.update = function() {
 
     if(Game.enemies.length == 0){ // Tworzenie wrogów
         for(let i = 0; i<this.wave; i++) Game.enemies[i] = new Mob(i, Game, Game.enemies,'Albert');
-        this.wave++;
+        this.wave+=2;
     }
 
     if(Game.ammoPacks.length == 0){ // Tworzenie AmmoPacków i HealtPacków

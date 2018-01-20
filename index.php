@@ -20,8 +20,9 @@
         
         <div class="box">
            <div class="characters">
-               <h1>Welcome back <span>Arthur</span></h1>
-                <p>Choose your character</p>
+               <h1>Podaj <span>login</span></h1>
+<!--                <p>Let's the show begin</p>-->
+<!--
                 <div class="char">
                     <p>Jonas Skarabeusz</p>
                     <p>20 lvl</p>
@@ -32,24 +33,14 @@
                     <p>20 lvl</p>
                     <p>Klasa</p>
                 </div>
-                <a class="button" href="game.php">GRAJ</a>
+-->
+
+              <form action="room.php">
+                  <input type="text" name="nickname">
+                  <button type="submit" class="button">Kontunuuj</button>
+              </form>
            </div>
         </div>
-        <div class="box">
-            <div class="sterowanie">
-               <h2>Sterowanie</h2>
-                <span class="key">[W]</span> - Ruch do góry<br />
-                <span class="key">[S]</span> - Ruch na dół<br />
-                <span class="key">[A]</span> - Ruch w lewo<br />
-                <span class="key">[D]</span> - Ruch w prawo<br />
-                <span class="key">[E]</span> - Zmiana broni<br />
-                <span class="key">[R]</span> - Przeładowanie broni<br />
-                <span class="key">[SHIFT]</span> - Sprint<br />
-                <span class="key">[ESC]</span> - Pauza<br />
-            </div>
-        </div>
-        <script> //var sugesterChatOptions = {"login":"your user login","client_id":"your client id","info":"your additional data"}</script>
-        <script src="https://cdn.intum.com/0/h/heseya/chat/JeQg5IY81hMejG4YWxho/widget.js"></script>
         
         <script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"></script>
     </body>

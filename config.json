@@ -2,5 +2,6 @@
     "name": "Testowy serwer",
     "description": "Phantom Envoy Server",
     "port": "3000",
-    "slots": "4"
+    "slots": "4",
+    "tickrate": "60"
 }

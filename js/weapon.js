@@ -1,5 +1,5 @@
 class Weapon {
-    constructor(name, magSize, fireRate, reloadTime, bulletVelocity, maxDamage, minDamage, dispersion, color='#333') {
+    constructor(name, magSize, fireRate, reloadTime, bulletVelocity, maxDamage, minDamage, dispersion, color='#333', variant) {
         this.name = name;
         this.magSize = magSize;
         this.fireRate = 60000/fireRate; //RPM
@@ -8,6 +8,10 @@ class Weapon {
         this.damage = [maxDamage, minDamage];
         this.dispersion = dispersion;
         this.color = color;
+
+        this.length = 70;
+
+        this.variant = variant;
 
         this.mag = magSize;
         this.ammo = 400 - this.mag;
@@ -37,11 +41,19 @@ class Bullet {
     }
 
     init(context) {
+        context.save();
+        context.translate(this.currX - Game.camera.xView, this.currY - Game.camera.yView);
+        context.rotate(this.angle);
         context.beginPath();
         context.fillStyle = 'gold';
-        context.arc(this.currX - Game.camera.xView, this.currY - Game.camera.yView, 2, 0, 2*Math.PI);
+
+        //context.arc(this.currX - Game.camera.xView, this.currY - Game.camera.yView, 2, 0, 2*Math.PI);
+
+        context.fillRect(-1, 10, 1, 25)
+
         context.fill();
         context.closePath();
+        context.restore();
     }
     
     update(newIndex) {

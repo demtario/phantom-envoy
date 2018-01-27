@@ -1,14 +1,18 @@
 class Mob {
-    constructor (index, parent, container, name) {
+    constructor (index, parent, container, target) {
         this.index = index;
         this.parent = parent;
         this.container = container;
 
-        this.name = name;
+        this.target = target;
+
+        this.texture = new Image();
+        this.texture.src = 'img/zombie.png';
+
         this.x = Math.round(Math.random()*Game.width) + Game.camera.xView;
         this.y = Math.round(Math.random()*Game.height) + Game.camera.yView;
         this.angle = 0;
-        this.moveSpeed = 140; // px/s
+        this.moveSpeed = 120; // px/s
 
         this.attackSpeed = 2; // ciosy na sekunde
         this.damage = 20;
@@ -25,17 +29,19 @@ class Mob {
 
         context.font = "20px Arial";
         context.fillStyle = "white";
-        context.fillText(this.hp,-10,-30);
+        context.fillText(this.hp,-20,-40);
 
         context.rotate(this.angle * Math.PI/180);
 
-        context.fillStyle='darkred';
-        context.fillRect(-10, -30, 20, 60);
+        context.drawImage(this.texture, -40, -50, 120, 90);
 
-        context.beginPath();
-        context.fillStyle = 'darksalmon';
-        context.arc(0,0,20,0,2*Math.PI);
-        context.fill();
+//        context.fillStyle='darkred';
+//        context.fillRect(-10, -30, 20, 60);
+//
+//        context.beginPath();
+//        context.fillStyle = 'darksalmon';
+//        context.arc(0,0,20,0,2*Math.PI);
+//        context.fill();
 
         context.closePath();
 
@@ -47,7 +53,7 @@ class Mob {
         this.index = newIndex;
 
         // Kąt obrotu
-        this.angle = Math.atan2(Game.player.x - this.x, - (Game.player.y - this.y) )*(180/Math.PI) - 90;
+        this.angle = Math.atan2(this.target.x - this.x, - (this.target.y - this.y) )*(180/Math.PI) - 90;
 
         // Ruch
         var vx = this.moveSpeed/60 * Math.cos(this.angle-(Math.PI/2));

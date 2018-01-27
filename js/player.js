@@ -7,21 +7,25 @@ class Player {
         this.angle;
         this.moveSpeed = 120; // px/s
 
+        this.texture = new Image();
+
         this.maxHp = 1000;
         this.hp = this.maxHp;
         this.dead = false;
 
-        this.maxMana = 1400;
+        this.maxMana = 200;
         this.mana = this.maxMana;
 
         this.kills = 0;
 
         this.reloading = false;
 
-        this.primaryWeapon = new Weapon('AK-47', 30, 650, 3500, 1200, 18, 25, 4, '#333');
-        this.secondaryWeapon = new Weapon('P90', 50, 900, 3000, 840, 11, 20, 8, '#169');
+        this.primaryWeapon = new Weapon('AK-47', 30, 650, 2500, 1200, 18, 25, 4, '#333', 'rifle1');
+        this.secondaryWeapon = new Weapon('P90', 50, 900, 1800, 840, 11, 20, 8, '#169', 'rifle2');
 
         this.weapon = this.primaryWeapon;
+
+        this.texture.src = 'img/player-'+this.weapon.variant+'.png';
 
         this.bullets = [];
     }
@@ -35,35 +39,58 @@ class Player {
         context.translate(this.x - xView, this.y - yView);
         context.rotate(this.angle * Math.PI/180);
 
-        context.beginPath();
-        context.fillStyle='#CCBAAC';
-        context.moveTo(10, -15);
-        context.lineTo(10, 15);
-        context.lineTo(36, 0);
-        context.fill();
-        context.closePath();
+        context.drawImage(this.texture, -40, -50, 120, 90);
 
-        context.fillStyle='#260';
-        context.fillRect(-10, -30, 20, 60);
-
-        context.fillStyle = this.weapon.color;
-        context.fillRect(24, -4, 20, 8);
-
-        context.beginPath();
-        context.fillStyle = 'saddlebrown';
-        context.arc(0,0,20,0,2*Math.PI);
-        context.fill();
-        context.closePath();
+//        context.beginPath();
+//        context.fillStyle='#CCBAAC';
+//        context.moveTo(10, -15);
+//        context.lineTo(10, 15);
+//        context.lineTo(36, 0);
+//        context.fill();
+//        context.closePath();
+//
+//        context.fillStyle='#260';
+//        context.fillRect(-10, -30, 20, 60);
+//
+//        context.fillStyle = this.weapon.color;
+//        context.fillRect(24, -4, 20, 8);
+//
+//        context.beginPath();
+//        context.fillStyle = 'saddlebrown';
+//        context.arc(0,0,20,0,2*Math.PI);
+//        context.fill();
+//        context.closePath();
 
         context.restore();
     }
     
     update() {
         // Poruszanie się
-        if(Key.isDown(Key.UP) || Key.isDown(Key.W)) this.moveUp();
-        if(Key.isDown(Key.LEFT) || Key.isDown(Key.A)) this.moveLeft();
-        if(Key.isDown(Key.DOWN) || Key.isDown(Key.S)) this.moveDown();
-        if(Key.isDown(Key.RIGHT) || Key.isDown(Key.D)) this.moveRight();
+
+        if(Key.isDown(Key.UP) || Key.isDown(Key.W)) {
+
+            if(Key.isDown(Key.LEFT) || Key.isDown(Key.A)) {
+                this.moveLeft(Math.sqrt(2));
+                this.moveUp(Math.sqrt(2));
+            } else if(Key.isDown(Key.RIGHT) || Key.isDown(Key.D)) {
+                this.moveRight(Math.sqrt(2));
+                this.moveUp(Math.sqrt(2));
+            }
+            else this.moveUp();
+
+        } else if(Key.isDown(Key.DOWN) || Key.isDown(Key.S)) {
+
+            if(Key.isDown(Key.LEFT) || Key.isDown(Key.A)) {
+                this.moveLeft(Math.sqrt(2));
+                this.moveDown(Math.sqrt(2));
+            } else if(Key.isDown(Key.RIGHT) || Key.isDown(Key.D)) {
+                this.moveRight(Math.sqrt(2));
+                this.moveDown(Math.sqrt(2));
+            }
+            else this.moveDown()
+
+        } else if(Key.isDown(Key.LEFT) || Key.isDown(Key.A)) this.moveLeft();
+        else if(Key.isDown(Key.RIGHT) || Key.isDown(Key.D)) this.moveRight();
 
         // Strzelanie
         if(mouseDown) this.shoot();
@@ -87,7 +114,7 @@ class Player {
         }
 
         //Sprint
-        if(Key.isDown(Key.SHIFT) && !this.reloading) {
+        if(Key.isDown(Key.SHIFT) && !this.reloading && this.mana > 0) {
             this.speedModifier = 1.4;
             this.sprint = true;
         }
@@ -97,6 +124,22 @@ class Player {
             this.speedModifier = 1;
             this.sprint = false;
         }
+
+        // FIXIT
+//        let kond = false;
+//        if(!kond && this.sprint && this.mana > 0) {
+//
+//            this.mana--;
+//            kond = true;
+//            setTimeout(function() { resetKond(); }, 2000);
+//        } else if(!kond && this.mana<this.maxMana){
+//            this.mana++;
+//            kond = true;
+//            setTimeout(function() { resetKond(); }, 2000);
+//        }
+//        function resetKond() {
+//            kond = false;
+//        }
 
         // Aktualizacja GUI
 
@@ -116,22 +159,28 @@ class Player {
 
         // Kąt obrotu
         this.angle = Math.atan2(cursorX - this.x + Game.camera.xView, - (cursorY - this.y + Game.camera.yView) )*(180/Math.PI) - 90;
+
+        // Pozycja lufy
+        this.weapon.barrelX = this.x + this.weapon.length * Math.cos((this.angle + 13) / (180/Math.PI));
+
+        this.weapon.barrelY = this.y + this.weapon.length * Math.sin((this.angle + 13) / (180/Math.PI));
+
     }
     
-    moveLeft() {
-        if(this.x > 20) this.x -= this.moveSpeed/Game.fps*this.speedModifier;
+    moveLeft(skos = 1) {
+        if(this.x > 20) this.x -= this.moveSpeed/Game.fps*this.speedModifier / skos;
     }
     
-    moveRight() {
-        if(this.x < Game.world.width - 20) this.x += this.moveSpeed/Game.fps*this.speedModifier;
+    moveRight(skos = 1) {
+        if(this.x < Game.world.width - 20) this.x += this.moveSpeed/Game.fps*this.speedModifier / skos;
     }
     
-    moveUp() {
-        if(this.y > 20) this.y -= this.moveSpeed/Game.fps*this.speedModifier;
+    moveUp(skos = 1) {
+        if(this.y > 20) this.y -= this.moveSpeed/Game.fps*this.speedModifier / skos;
     }
     
-    moveDown() {
-        if(this.y < Game.world.height - 20) this.y += this.moveSpeed/Game.fps*this.speedModifier;
+    moveDown(skos = 1) {
+        if(this.y < Game.world.height - 20) this.y += this.moveSpeed/Game.fps*this.speedModifier / skos;
     }
     
     shoot() {
@@ -146,7 +195,7 @@ class Player {
 
                     let dispersion = (this.angle+(Math.round(Math.random()*this.weapon.dispersion)-(this.weapon.dispersion/2))+90) * Math.PI/180;
 
-                    let newBullet = new Bullet(this.bullets.length, this.x, this.y, this.weapon.bulletVelocity, dispersion, damageRand, this, this.bullets);
+                    let newBullet = new Bullet(this.bullets.length, this.weapon.barrelX, this.weapon.barrelY, this.weapon.bulletVelocity, dispersion, damageRand, this, this.bullets);
                     this.bullets.push(newBullet);
 
                     this.weapon.mag--;
@@ -187,6 +236,8 @@ class Player {
         document.getElementById("gun-reloading-bar").style.width = "0";
         this.reloading = false;
         this.weapon.delay = false;
+
+        this.texture.src = 'img/player-'+this.weapon.variant+'.png';
     }
     
     reloadWeapon() {

@@ -20,6 +20,7 @@
         
         <div class="box">
            <div class="characters">
+              <a class="button" href="game.php">GRAJ</a>
                <h1>Podaj <span>login</span></h1>
 <!--                <p>Let's the show begin</p>-->
 <!--

@@ -7,14 +7,15 @@ class Player {
         this.angle;
         this.moveSpeed = 120; // px/s
 
-        this.texture = new Image();
-
-        this.maxHp = 1000;
+        this.maxHp = 2000;
         this.hp = this.maxHp;
         this.dead = false;
 
         this.maxMana = 200;
         this.mana = this.maxMana;
+
+        this.sizeX = 20;
+        this.sizeY = 20;
 
         this.kills = 0;
 
@@ -25,6 +26,7 @@ class Player {
 
         this.weapon = this.primaryWeapon;
 
+        this.texture = new Image();
         this.texture.src = 'img/player-'+this.weapon.variant+'.png';
 
         this.bullets = [];
@@ -46,12 +48,18 @@ class Player {
     
     update() {
 
-        if(Key.isDown(Key.RIGHT) || Key.isDown(Key.D)) this.move(1, 0); // Prawo
-        if(Key.isDown(Key.LEFT) || Key.isDown(Key.A)) this.move(-1, 0); // Lewo
+        let skosik = Math.sqrt(2);
+        let vX = 0;
+        let vY = 0;
 
-        if(Key.isDown(Key.UP) || Key.isDown(Key.W) )this.move(0, -1); // Góra
-        if(Key.isDown(Key.DOWN) || Key.isDown(Key.S)) this.move(0, 1); //Dół
+        if(Key.isDown(Key.RIGHT) || Key.isDown(Key.D)) vX++; // Prawo
+        if(Key.isDown(Key.LEFT) || Key.isDown(Key.A)) vX--; // Lewo
 
+        if(Key.isDown(Key.UP) || Key.isDown(Key.W) ) vY--; // Góra
+        if(Key.isDown(Key.DOWN) || Key.isDown(Key.S)) vY++; //Dół
+
+        if(vX != 0 && vY != 0) this.move(vX, vY, skosik);
+        else this.move(vX, vY);
 
         // Strzelanie
         if(mouseDown) this.shoot();
@@ -86,9 +94,23 @@ class Player {
             this.sprint = false;
         }
 
+        //Regeneracja many
+        if(!this.manaDelay && this.mana < this.maxMana){
+
+            this.manaDelay = true;
+
+            this.mana++;
+
+            let currThis = this;
+            setTimeout(function() { resetManaDelay(currThis); }, 1000);
+            function resetManaDelay(THIS) {
+                THIS.manaDelay = false;
+            }
+        }
+
         // Stawianie klocka hyhyhy
-        if(nowClicked == 49 && this.mana > 0) {
-            Game.covers.push(new Cover(0, cursorX + Game.camera.xView, cursorY + Game.camera.yView, 50, this, this.cover));
+        if(nowClicked == 49 && this.mana > 10) {
+            Game.covers.push(new Cover(0, cursorX + Game.camera.xView, cursorY + Game.camera.yView, 50, 20000, this, Game.covers));
             this.mana -= 10;
             nowClicked = '1';
         }
@@ -97,11 +119,11 @@ class Player {
 
         document.getElementById("username").innerHTML = this.name;
 
-        $('#life-bar').css('width', (this.hp/this.maxHp)*100+'%');
-        $('#life-info').html(this.hp+'/'+this.maxHp);
+        document.getElementById('life-bar').style.width = this.hp/this.maxHp*100+'%';
+        document.getElementById("life-info").innerHTML = (this.hp+'/'+this.maxHp);
 
-        $('#mana-bar').css('width', (this.mana/this.maxMana)*100+'%');
-        $('#mana-info').html(this.mana+'/'+this.maxMana);
+        document.getElementById('mana-bar').style.width = (this.mana/this.maxMana)*100+'%';
+        document.getElementById("mana-info").innerHTML = (this.mana+'/'+this.maxMana);
 
         document.getElementById("kills").innerHTML = this.kills;
 

@@ -7,7 +7,7 @@ class Powerup {
         this.x = Math.round(Math.random()*Game.width) + Game.camera.xView;
         this.y = Math.round(Math.random()*Game.height) + Game.camera.yView;
 
-        this.width = 80;
+        this.width = 50;
 
         this.shallBeDestroyed = false;
     }
@@ -18,8 +18,12 @@ class Powerup {
 
         context.rotate(this.angle * Math.PI/180);
 
-        context.fillStyle = this.color;
-        context.fillRect(-this.width/2, -this.width/2, this.width/2, this.width/2);
+        if(this.texture) {
+            context.drawImage(this.texture, -this.width/2, -this.width/2, this.width, this.width);
+        } else {
+            context.fillStyle = this.color;
+            context.fillRect(-this.width/2, -this.width/2, this.width/2, this.width/2);
+        }
 
         context.closePath();
 
@@ -57,6 +61,9 @@ class AmmoPack extends Powerup {
     constructor(index, container, howMany) {
         super();
 
+        //this.texture = new Image();
+        //this.texture.src = 'img/ammopack.png';
+
         this.container = container;
         this.howMany = howMany;
         this.color = '#ff9900';
@@ -72,6 +79,9 @@ class HealthPack extends Powerup {
 
     constructor(index, container, howMany) {
         super();
+
+        this.texture = new Image();
+        this.texture.src = 'img/firstaid.png';
 
         this.container = container;
         this.howMany = howMany;

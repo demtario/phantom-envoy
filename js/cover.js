@@ -1,18 +1,25 @@
 class Cover {
-    constructor(index, x, y, size, parent, container) {
+    constructor(index, x, y, size, lifetime, parent, container) {
         this.index = index;
 
         this.parent = parent;
+        this.container = container;
+
+        this.lifeTime = lifetime;
 
         this.texture = new Image();
         this.texture.src = 'img/cover.jpg';
 
         this.size = size;
-        this.sizeX = size;
-        this.sizeY = size;
+        this.sizeX = size - 20;
+        this.sizeY = size - 20;
 
         this.x = x;
         this.y = y;
+
+        let THIS = this;
+
+        setTimeout(function() { THIS.delete() }, this.lifeTime);
     }
 
     draw(ctx) {
@@ -23,16 +30,11 @@ class Cover {
         ctx.drawImage(this.texture, 0, 0, this.size, this.size);
         ctx.restore();
     }
-}
 
-function isColision(object) {
-    for(let i = 0; i < Game.covers.length; i++){
-        if(object.x > Game.covers[i].x - Game.covers[i].size/2 && object.x < Game.covers[i].x + Game.covers[i].size/2)
-            if(object.y > Game.covers[i].y - Game.covers[i].size/2 && object.y < Game.covers[i].y + Game.covers[i].size/2) {
-                return true;
-            }
-        }
-    return false;
+    delete() {
+        this.container.splice(this.index,1);
+        delete this;
+    }
 }
 
 function isColiding(px, py, table) {
@@ -44,7 +46,9 @@ function isColiding(px, py, table) {
         let sizeY = table[i].sizeY/2;
 
         if(Math.abs(px - x) < sizeX + 20)
-            if(Math.abs(py - y) < sizeY + 20) return table[i];
+            if(Math.abs(py - y) < sizeY + 20) {
+                return i+1;
+            }
 
     }
     return false;

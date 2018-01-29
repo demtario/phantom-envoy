@@ -4,7 +4,8 @@ class Mob {
         this.parent = parent;
         this.container = container;
 
-        this.size = 20;
+        this.sizeX = 20;
+        this.sizeY = 20;
 
         this.target = target;
 
@@ -94,6 +95,7 @@ class Zombie extends Mob {
         var vx = this.moveSpeed/60 * Math.cos(this.angle-(Math.PI/2));
         var vy = this.moveSpeed/60 * Math.sin(this.angle-(Math.PI/2));
 
+
         let col = isColiding(this.x + vx, this.y + vy, Game.covers);
 
         if ( !col ) {
@@ -178,10 +180,14 @@ class Sniper extends Mob {
 
         this.distance = Math.sqrt(Math.pow(this.x - this.target.x, 2) + Math.pow(this.y - this.target.y, 2));
 
-        let col = isColiding(this.x + vx, this.y + vy, Game.covers);
+        let forward = isColiding(this.x + vx, this.y + vy, Game.covers);
+        let backward = isColiding(this.x - vx, this.y + vy, Game.covers);
 
-        if ( this.distance > this.shootRange && !col ) {
+        if ( this.distance > this.shootRange + 30 && !forward ) {
             this.x += vx;
+            this.y += vy;
+        } else if( this.distance < this.shootRange - 30 && !backward ) {
+            this.x -= vx;
             this.y += vy;
         }
 

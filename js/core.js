@@ -1,6 +1,6 @@
-$(document).ready(function () {
+onload = function() {
     Game.start();
-});
+}
 
 let reloadSound = new Audio("music/reload.wav");
 let shotSound = new Audio("music/shot2.wav");
@@ -173,6 +173,7 @@ Game.draw = function() {
 Game.drawEnd = function() {
     
     Game.player.hp = 0;
+    Game.player.update();
 
     if(this.player.kills>getCookie('rekord')) setCookie('rekord',Game.player.kills);
     

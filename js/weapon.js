@@ -64,39 +64,31 @@ class Bullet {
 		this.x += vx;
 		this.y += vy;
         
-        // delecja pocisków poza światem
-        if(this.x > Game.world.width+20 || this.x < -20 || this.y > Game.world.height+20 || this.y < -20) {
-            this.container.splice(this.index,1);
-            delete this;
+        // Kolizje
+        let area = isColiding(this.x + vx, this.y + vy, [{x: Game.world.width/2, y: Game.world.height/2, sizeX: Game.world.width-50, sizeY: Game.world.height-50}]);
+        if(!area) {
+            this.delete();
         }
 
         // zadanie obrażeń
 
-//        let col = isColiding(this.x, this.y, Game.enemies);
-//
-//        if(!col) {
-//            this.dealDamage(col);
-//            this.delete();
-//        }
-
-        for(var i = 0; i < Game.enemies.length; i++){
-             if(this.x+30 > Game.enemies[i].x && this.x-30 < Game.enemies[i].x)
-                if(this.y+30 > Game.enemies[i].y && this.y-30 < Game.enemies[i].y) {
-
-                    this.dealDamage(Game.enemies[i]);
-                    this.delete();
-
-                }
+        //wróg
+        let enemyCol = isColiding(this.x, this.y, Game.enemies);
+        if(enemyCol) {
+            this.dealDamage(Game.enemies[enemyCol-1]);
+            this.delete();
         }
 
-        if(this.x+30 > Game.player.x && this.x-30 < Game.player.x)
-            if(this.y+30 > Game.player.y && this.y-30 < Game.player.y) {
-                this.dealDamage(Game.player);
-                this.delete();
-            }
+        //gracz
+        let playerCol = isColiding(this.x, this.y, [Game.player]);
+        if(playerCol ) {
+            this.dealDamage(Game.player);
+            this.delete();
+        }
 
         // Kolizja z osłoną
-        if(isColision(this)) this.delete();
+        let coverCol = isColiding(this.x - vx, this.y - vy, Game.covers);
+        if(coverCol) this.delete();
 
     }
     

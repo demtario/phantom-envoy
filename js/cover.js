@@ -11,8 +11,6 @@ class Cover {
         this.texture.src = 'img/cover.jpg';
 
         this.size = size;
-        this.sizeX = size - 20;
-        this.sizeY = size - 20;
 
         this.x = x;
         this.y = y;
@@ -37,16 +35,33 @@ class Cover {
     }
 }
 
-function isColiding(px, py, table) {
+function isColiding(px, py, me, table) {
+
+
+    if(me.size) {
+        var PsizeX = me.size/2;
+        var PsizeY = me.size/2;
+    } else {
+        var PsizeX = me.sizeX/2;
+        var PsizeY = me.sizeY/2;
+    }
+
     for(let i = 0; i < table.length; i++) {
 
         let x = table[i].x;
         let y = table[i].y;
-        let sizeX = table[i].sizeX/2;
-        let sizeY = table[i].sizeY/2;
 
-        if(Math.abs(px - x) < sizeX + 20)
-            if(Math.abs(py - y) < sizeY + 20) {
+        if(table[i].size) {
+            var sizeX = table[i].size/2;
+            var sizeY = table[i].size/2;
+        } else {
+            var sizeX = table[i].sizeX/2;
+            var sizeY = table[i].sizeY/2;
+        }
+
+
+        if(Math.abs(px - x) < sizeX + PsizeX)
+            if(Math.abs(py - y) < sizeY + PsizeY) {
                 return i+1;
             }
 

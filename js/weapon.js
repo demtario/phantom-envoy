@@ -34,6 +34,8 @@ class Bullet {
         this.directionY = cursorY - this.y;
         this.speed = speed;
 
+        this.size = 2;
+
         this.angle = angle;
 
         this.damage = damage;
@@ -65,7 +67,7 @@ class Bullet {
 		this.y += vy;
         
         // Kolizje
-        let area = isColiding(this.x + vx, this.y + vy, [{x: Game.world.width/2, y: Game.world.height/2, sizeX: Game.world.width-50, sizeY: Game.world.height-50}]);
+        let area = isColiding(this.x + vx, this.y + vy, this, [{x: Game.world.width/2, y: Game.world.height/2, sizeX: Game.world.width-50, sizeY: Game.world.height-50}]);
         if(!area) {
             this.delete();
         }
@@ -73,21 +75,21 @@ class Bullet {
         // zadanie obrażeń
 
         //wróg
-        let enemyCol = isColiding(this.x, this.y, Game.enemies);
+        let enemyCol = isColiding(this.x, this.y, this, Game.enemies);
         if(enemyCol) {
             this.dealDamage(Game.enemies[enemyCol-1]);
             this.delete();
         }
 
         //gracz
-        let playerCol = isColiding(this.x, this.y, [Game.player]);
-        if(playerCol ) {
+        let playerCol = isColiding(this.x, this.y, this, [Game.player]);
+        if(playerCol) {
             this.dealDamage(Game.player);
             this.delete();
         }
 
         // Kolizja z osłoną
-        let coverCol = isColiding(this.x - vx, this.y - vy, Game.covers);
+        let coverCol = isColiding(this.x - vx, this.y - vy, this, Game.covers);
         if(coverCol) this.delete();
 
     }

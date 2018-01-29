@@ -4,19 +4,24 @@ class Mob {
         this.parent = parent;
         this.container = container;
 
-        this.sizeX = 20;
-        this.sizeY = 20;
+        this.size = 60;
 
         this.target = target;
 
         this.texture = new Image();
+        do {
 
-        this.x = Math.round(Math.random()*Game.width) + Game.camera.xView;
-        this.y = Math.round(Math.random()*Game.height) + Game.camera.yView;
+            this.x = Game.camera.xView - 200 + Math.random()*(Game.width+400);
+            this.y = Game.camera.yView - 200 + Math.random()*(Game.height+400);
+
+            var col = isColiding(this.x, this.y, this, Game.enemies) - 1;
+            var play = isColiding(this.x, this.y, this, [{x: Game.camera.xView + Game.width/2, y: Game.camera.yView + Game.height/2, sizeX: Game.width, sizeY: Game.height}]);
+        } while(play || Game.enemies[col] == this);
+
         this.angle = 0;
         this.moveSpeed = 110; // px/s
 
-        this.maxHp = 500;
+        this.maxHp = 400;
         this.hp = this.maxHp;
     }
 
@@ -63,21 +68,15 @@ class Zombie extends Mob {
         context.save();
         context.translate(this.x - Game.camera.xView, this.y - Game.camera.yView);
 
-        context.font = "20px Arial";
-        context.fillStyle = "white";
-        context.fillText(this.hp,-20,-40);
+        context.font = "14px Arial";
+        context.fillStyle = "#ccc";
 
         context.rotate(this.angle * Math.PI/180);
 
         context.drawImage(this.texture, -40, -50, 120, 90);
 
-//        context.fillStyle='darkred';
-//        context.fillRect(-10, -30, 20, 60);
-//
-//        context.beginPath();
-//        context.fillStyle = 'darksalmon';
-//        context.arc(0,0,20,0,2*Math.PI);
-//        context.fill();
+        context.rotate(-126 * Math.PI/180);
+        context.fillText(this.hp,-12,-6);
 
         context.closePath();
 
@@ -96,16 +95,17 @@ class Zombie extends Mob {
         var vy = this.moveSpeed/60 * Math.sin(this.angle-(Math.PI/2));
 
 
-        let col = isColiding(this.x + vx, this.y + vy, Game.covers);
+        let covers = isColiding(this.x + vx, this.y + vy, this, Game.covers);
+        let enemies = isColiding(this.x + vx, this.y + vy, this, Game.enemies);
+        let player = isColiding(this.x + vx, this.y + vy, this, [Game.player]);
 
-        if ( !col ) {
+        if ( !covers && !player && Game.enemies[enemies-1]==this ) {
             this.x += vx;
             this.y += vy;
         }
 
         // Atak gracza
-        if(this.x+this.attackRange > Game.player.x && this.x-this.attackRange < Game.player.x)
-            if(this.y+this.attackRange > Game.player.y && this.y-this.attackRange < Game.player.y) this.attack(Game.player);
+        if(player) this.attack(Game.player);
 
         // Śmierć
         if(this.hp <= 0) {
@@ -153,13 +153,15 @@ class Sniper extends Mob {
         context.save();
         context.translate(this.x - Game.camera.xView, this.y - Game.camera.yView);
 
-        context.font = "20px Arial";
-        context.fillStyle = "white";
-        context.fillText(this.hp,-20,-40);
+        context.font = "14px Arial";
+        context.fillStyle = "#ccc";
 
         context.rotate(this.angle * Math.PI/180);
 
         context.drawImage(this.texture, -40, -50, 120, 90);
+
+        context.rotate(-42 * Math.PI/180);
+        context.fillText(this.hp,-5,-10);
 
         context.closePath();
 
@@ -180,13 +182,16 @@ class Sniper extends Mob {
 
         this.distance = Math.sqrt(Math.pow(this.x - this.target.x, 2) + Math.pow(this.y - this.target.y, 2));
 
-        let forward = isColiding(this.x + vx, this.y + vy, Game.covers);
-        let backward = isColiding(this.x - vx, this.y + vy, Game.covers);
+        let forCov = isColiding(this.x + vx, this.y + vy, this, Game.covers);
+        let backCov = isColiding(this.x - vx, this.y + vy, this, Game.covers);
 
-        if ( this.distance > this.shootRange + 30 && !forward ) {
+        let forEn = isColiding(this.x + vx, this.y + vy, this, Game.enemies);
+        let backEn = isColiding(this.x - vx, this.y + vy, this, Game.enemies);
+
+        if ( this.distance > this.shootRange + 30 && !forCov && Game.enemies[forEn-1]==this ) {
             this.x += vx;
             this.y += vy;
-        } else if( this.distance < this.shootRange - 30 && !backward ) {
+        } else if( this.distance < this.shootRange - 30 && !backCov && Game.enemies[backEn-1]==this)  {
             this.x -= vx;
             this.y += vy;
         }

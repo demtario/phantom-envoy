@@ -4,16 +4,15 @@
 1. Stawianie klocków!
 2. Przeciwnicy snajperzy!
 3. Pozbycie się jQuery xdd
+4. Poprawa w systemie fal
+5. Przeciwnicy nie respią Ci się na mordce
 
 ## Planowane nowości
-1. MULTIPLAYER?
-2. Minimapka
-3. Nowi przeciwnicy
-
-### Obecne ToDo
 1. Generacja ciekawszej mapy gry niż podłoga
-2. Przebudowa SI wrogów by były bardziej deadly
+2. Jakiś pathfinding dla wrogów
+3. MULTIPLAYER?
+4. Minimapka
+5. Nowi przeciwnicy
 
-### BugLog
-1. Po śmierci na gui nie zawsze jest 0 hp //FIXED
-2. Chodząc na skos jest się szybszym //FIXED
+### Bugi do naprawienia
+Brak zgłoszeń

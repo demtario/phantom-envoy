@@ -14,8 +14,7 @@ class Player {
         this.maxMana = 200;
         this.mana = this.maxMana;
 
-        this.sizeX = 20;
-        this.sizeY = 20;
+        this.size = 80;
 
         this.kills = 0;
 
@@ -142,8 +141,8 @@ class Player {
     }
     
     move(vx, vy, skos = 1) {
-        let covers = isColiding(this.x + vx * this.moveSpeed/Game.fps*this.speedModifier / skos, this.y + vy * this.moveSpeed/Game.fps*this.speedModifier / skos, Game.covers);
-        let area = isColiding(this.x + vx * this.moveSpeed/Game.fps*this.speedModifier / skos, this.y + vy * this.moveSpeed/Game.fps*this.speedModifier / skos, [{x: Game.world.width/2, y: Game.world.height/2, sizeX: Game.world.width-50, sizeY: Game.world.height-50}]);
+        let covers = isColiding(this.x + vx * this.moveSpeed/Game.fps*this.speedModifier / skos, this.y + vy * this.moveSpeed/Game.fps*this.speedModifier / skos, this, Game.covers);
+        let area = isColiding(this.x + vx * this.moveSpeed/Game.fps*this.speedModifier / skos, this.y + vy * this.moveSpeed/Game.fps*this.speedModifier / skos, this, [{x: Game.world.width/2, y: Game.world.height/2, sizeX: Game.world.width-50, sizeY: Game.world.height-50}]);
         if(area && !covers) {
             this.x += vx * this.moveSpeed/Game.fps*this.speedModifier / skos;
             this.y += vy * this.moveSpeed/Game.fps*this.speedModifier / skos

@@ -20,8 +20,8 @@ class Player {
 
         this.reloading = false;
 
-        this.primaryWeapon = new Weapon('AK-47', 30, 650, 2500, 1200, 18, 25, 4, '#333', 'rifle1');
-        this.secondaryWeapon = new Weapon('P90', 50, 900, 1800, 840, 11, 20, 8, '#169', 'rifle2');
+        this.primaryWeapon = new Weapon('AK-47', 30, 650, 2500, 1200, 25, 36, 4, 'rifle1');
+        this.secondaryWeapon = new Weapon('P90', 50, 900, 1800, 840, 18, 25, 8, 'rifle2');
 
         this.weapon = this.primaryWeapon;
 
@@ -41,56 +41,17 @@ class Player {
 
         context.drawImage(this.texture, -40, -50, 120, 90);
 
-//        context.beginPath();
-//        context.fillStyle='#CCBAAC';
-//        context.moveTo(10, -15);
-//        context.lineTo(10, 15);
-//        context.lineTo(36, 0);
-//        context.fill();
-//        context.closePath();
-//
-//        context.fillStyle='#260';
-//        context.fillRect(-10, -30, 20, 60);
-//
-//        context.fillStyle = this.weapon.color;
-//        context.fillRect(24, -4, 20, 8);
-//
-//        context.beginPath();
-//        context.fillStyle = 'saddlebrown';
-//        context.arc(0,0,20,0,2*Math.PI);
-//        context.fill();
-//        context.closePath();
-
         context.restore();
     }
     
     update() {
-        // Poruszanie się
 
-        if(Key.isDown(Key.UP) || Key.isDown(Key.W)) {
+        if(Key.isDown(Key.RIGHT) || Key.isDown(Key.D)) this.move(1, 0); // Prawo
+        if(Key.isDown(Key.LEFT) || Key.isDown(Key.A)) this.move(-1, 0); // Lewo
 
-            if(Key.isDown(Key.LEFT) || Key.isDown(Key.A)) {
-                this.moveLeft(Math.sqrt(2));
-                this.moveUp(Math.sqrt(2));
-            } else if(Key.isDown(Key.RIGHT) || Key.isDown(Key.D)) {
-                this.moveRight(Math.sqrt(2));
-                this.moveUp(Math.sqrt(2));
-            }
-            else this.moveUp();
+        if(Key.isDown(Key.UP) || Key.isDown(Key.W) )this.move(0, -1); // Góra
+        if(Key.isDown(Key.DOWN) || Key.isDown(Key.S)) this.move(0, 1); //Dół
 
-        } else if(Key.isDown(Key.DOWN) || Key.isDown(Key.S)) {
-
-            if(Key.isDown(Key.LEFT) || Key.isDown(Key.A)) {
-                this.moveLeft(Math.sqrt(2));
-                this.moveDown(Math.sqrt(2));
-            } else if(Key.isDown(Key.RIGHT) || Key.isDown(Key.D)) {
-                this.moveRight(Math.sqrt(2));
-                this.moveDown(Math.sqrt(2));
-            }
-            else this.moveDown()
-
-        } else if(Key.isDown(Key.LEFT) || Key.isDown(Key.A)) this.moveLeft();
-        else if(Key.isDown(Key.RIGHT) || Key.isDown(Key.D)) this.moveRight();
 
         // Strzelanie
         if(mouseDown) this.shoot();
@@ -125,21 +86,12 @@ class Player {
             this.sprint = false;
         }
 
-        // FIXIT
-//        let kond = false;
-//        if(!kond && this.sprint && this.mana > 0) {
-//
-//            this.mana--;
-//            kond = true;
-//            setTimeout(function() { resetKond(); }, 2000);
-//        } else if(!kond && this.mana<this.maxMana){
-//            this.mana++;
-//            kond = true;
-//            setTimeout(function() { resetKond(); }, 2000);
-//        }
-//        function resetKond() {
-//            kond = false;
-//        }
+        // Stawianie klocka hyhyhy
+        if(nowClicked == 49 && this.mana > 0) {
+            Game.covers.push(new Cover(0, cursorX + Game.camera.xView, cursorY + Game.camera.yView, 50, this, this.cover));
+            this.mana -= 10;
+            nowClicked = '1';
+        }
 
         // Aktualizacja GUI
 
@@ -167,20 +119,13 @@ class Player {
 
     }
     
-    moveLeft(skos = 1) {
-        if(this.x > 20) this.x -= this.moveSpeed/Game.fps*this.speedModifier / skos;
-    }
-    
-    moveRight(skos = 1) {
-        if(this.x < Game.world.width - 20) this.x += this.moveSpeed/Game.fps*this.speedModifier / skos;
-    }
-    
-    moveUp(skos = 1) {
-        if(this.y > 20) this.y -= this.moveSpeed/Game.fps*this.speedModifier / skos;
-    }
-    
-    moveDown(skos = 1) {
-        if(this.y < Game.world.height - 20) this.y += this.moveSpeed/Game.fps*this.speedModifier / skos;
+    move(vx, vy, skos = 1) {
+        let covers = isColiding(this.x + vx * this.moveSpeed/Game.fps*this.speedModifier / skos, this.y + vy * this.moveSpeed/Game.fps*this.speedModifier / skos, Game.covers);
+        let area = isColiding(this.x + vx * this.moveSpeed/Game.fps*this.speedModifier / skos, this.y + vy * this.moveSpeed/Game.fps*this.speedModifier / skos, [{x: Game.world.width/2, y: Game.world.height/2, sizeX: Game.world.width-50, sizeY: Game.world.height-50}]);
+        if(area && !covers) {
+            this.x += vx * this.moveSpeed/Game.fps*this.speedModifier / skos;
+            this.y += vy * this.moveSpeed/Game.fps*this.speedModifier / skos
+        }
     }
     
     shoot() {

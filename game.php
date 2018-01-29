@@ -40,7 +40,7 @@
         </div>
         
         <div class="skillbar">
-            <div class="skill"></div>
+            <div class="skill"><img src="img/cover.jpg" /></div>
             <div class="skill"></div>
             <div class="skill"></div>
             <div class="skill"></div>
@@ -66,5 +66,6 @@
         <script type="text/javascript" src="js/enemy.js?<?php echo $rand; ?>"></script>
         <script type="text/javascript" src="js/weapon.js?<?php echo $rand; ?>"></script>
         <script type="text/javascript" src="js/powerup.js?<?php echo $rand; ?>"></script>
+        <script type="text/javascript" src="js/cover.js?<?php echo $rand; ?>"></script>
     </body>
 </html>

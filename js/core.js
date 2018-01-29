@@ -106,6 +106,8 @@ Game.start = function() {
     // Powerupy
     this.ammoPacks = [];
 
+    this.covers = [];
+
     // Let's go
     Game._onEachFrame(Game.run);
 }
@@ -157,6 +159,9 @@ Game.draw = function() {
     // Rysuje ammo
     for(let i = 0; i<this.ammoPacks.length; i++) Game.ammoPacks[i].draw(Game.context);
 
+    // Rysuje covery
+    for(let i = 0; i<this.covers.length; i++) Game.covers[i].draw(Game.context);
+
     // Rysuje gracza
     Game.player.draw(Game.context,Game.camera.xView,Game.camera.yView);
     
@@ -167,6 +172,8 @@ Game.draw = function() {
 // GameOver
 Game.drawEnd = function() {
     
+    Game.player.hp = 0;
+
     if(this.player.kills>getCookie('rekord')) setCookie('rekord',Game.player.kills);
     
     Game.context.fillStyle = "#444";
@@ -221,7 +228,11 @@ Game.update = function() {
     }
 
     if(Game.enemies.length == 0){ // Tworzenie wrogów
-        for(let i = 0; i<this.wave; i++) Game.enemies[i] = new Mob(i, Game, Game.enemies, Game.player);
+        for(let i = 0; i<this.wave; i++) {
+            let rand = Math.round(Math.random());
+            if(rand) Game.enemies[i] = new Sniper(i, Game, Game.enemies, Game.player);
+            else Game.enemies[i] = new Zombie(i, Game, Game.enemies, Game.player);
+        }
         this.wave+=2;
     }
         

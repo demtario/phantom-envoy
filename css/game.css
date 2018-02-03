@@ -204,18 +204,13 @@ canvas {
     position: relative;
     box-sizing: border-box;
     overflow: hidden;
-}
-
-.skill img{
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+    transition: 0.3s;
 }
 
 .skill::before
 {
-    content: "[" counter(key-number) "]";
-    padding: 5px 1px;
+    content: counter(key-number);
+    padding: 3px 3px;
     font-family: Courier;
     line-height: 18px;
     background-color: rgba(0,170,208,1);
@@ -224,6 +219,18 @@ canvas {
     border-radius: 5px;
     bottom: 4px;
     left: 4px;
+    z-index: 20;
+}
+
+.skill.unactive img
+{
+    filter: grayscale(1);
+}
+
+.skill img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 .guns

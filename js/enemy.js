@@ -55,6 +55,8 @@ class Zombie extends Mob {
     constructor (index, parent, container, target) {
 
         super(index, parent, container, target);
+        
+        this.maxHp = this.hp = 500;
 
         this.texture.src = 'img/zombie.png';
 
@@ -134,6 +136,8 @@ class Sniper extends Mob {
     constructor (index, parent, container, target) {
 
         super(index, parent, container, target);
+        
+        this.maxHp = this.hp = 300;
 
         this.texture.src = 'img/snajper.png';
 

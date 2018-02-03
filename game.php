@@ -40,8 +40,8 @@
         </div>
         
         <div class="skillbar">
-            <div class="skill"><img src="img/cover.jpg" /></div>
-            <div class="skill"></div>
+            <div class="skill" id="skill1"><img src="img/cover.jpg" /></div>
+            <div class="skill" id="skill2"><img src="img/firstaid.png" ></div>
             <div class="skill"></div>
             <div class="skill"></div>
         </div>

@@ -89,8 +89,9 @@ class HealthPack extends Powerup {
     }
 
     doSomething(target) {
-        target.hp += this.howMany;
-        if(target.hp > target.maxHp) target.hp = target.maxHp;
+        
+        target.medKits++;
+        
     }
 
 }

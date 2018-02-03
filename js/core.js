@@ -50,6 +50,16 @@ document.addEventListener('keydown', function(e) { nowClicked = e.keyCode; });
 let scrolling;
 window.addEventListener('mousewheel', function(e) { scrolling=true; });
 
+let Controls = {
+    reload: 82,
+    changeWeapon: 69,
+    
+    skill1: 49,
+    skill2: 50,
+    skill3: 51,
+    skill4: 52
+}
+
 //Obiekt gra
 let Game = {
     fps: 60,
@@ -143,8 +153,8 @@ Game.run = (function() {
         //Pętla gry
         if(loops) {
             if(!Game.endGame && !Game.gamePaused) Game.draw();
+            else if(Game.endGame) Game.drawEnd();
             else if(Game.gamePaused) Game.drawPause();
-            else Game.drawEnd();
         }
     }
 })();
@@ -173,7 +183,8 @@ Game.draw = function() {
 Game.drawEnd = function() {
     
     Game.player.hp = 0;
-    Game.player.update();
+    
+    Game.player.guiUpdate();
 
     if(this.player.kills>getCookie('rekord')) setCookie('rekord',Game.player.kills);
     

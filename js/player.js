@@ -29,6 +29,8 @@ class Player {
         this.texture.src = 'img/player-'+this.weapon.variant+'.png';
 
         this.bullets = [];
+        
+        this.medKits = 0;
     }
     
     draw(context, xView, yView) {
@@ -47,6 +49,7 @@ class Player {
     
     update() {
 
+        // Poruszanie postaci
         let skosik = Math.sqrt(2);
         let vX = 0;
         let vY = 0;
@@ -60,27 +63,6 @@ class Player {
         if(vX != 0 && vY != 0) this.move(vX, vY, skosik);
         else this.move(vX, vY);
 
-        // Strzelanie
-        if(mouseDown) this.shoot();
-
-        // Pociski
-        for(var i = 0; i < this.bullets.length; i++) {
-            this.bullets[i].update(i);
-        }
-
-        //Przeładowanie
-        if(nowClicked == 82) {
-            this.reloadWeapon();
-            nowClicked = 'r';
-        }
-
-        //Zmiana broni
-        if(nowClicked == 69 || scrolling == true) {
-            this.switchWeapon();
-            nowClicked = 'e';
-            scrolling = false;
-        }
-
         //Sprint
         if(Key.isDown(Key.SHIFT) && !this.reloading && this.mana > 0) {
             this.speedModifier = 1.4;
@@ -92,6 +74,34 @@ class Player {
             this.speedModifier = 1;
             this.sprint = false;
         }
+
+        // Strzelanie
+        if(mouseDown) this.shoot();
+
+        //Przeładowanie
+        if(nowClicked == Controls.reload) {
+            this.reloadWeapon();
+            nowClicked = 'r';
+        }
+
+        //Zmiana broni
+        if(nowClicked == Controls.changeWeapon || scrolling == true) {
+            this.switchWeapon();
+            nowClicked = 'e';
+            scrolling = false;
+        }
+        
+        // Skille
+        if(nowClicked == Controls.skill1) {
+            this.placeCover();
+            nowClicked = '1';
+        }
+        
+        if(nowClicked == Controls.skill2) {
+            this.useMedKit();
+            nowClicked = '2';
+        }
+        if(this.healing) this.speedModifier = 0;
 
         //Regeneracja many
         if(!this.manaDelay && this.mana < this.maxMana){
@@ -107,14 +117,30 @@ class Player {
             }
         }
 
-        // Stawianie klocka hyhyhy
-        if(nowClicked == 49 && this.mana > 10) {
-            Game.covers.push(new Cover(0, cursorX + Game.camera.xView, cursorY + Game.camera.yView, 50, 20000, this, Game.covers));
-            this.mana -= 10;
-            nowClicked = '1';
+        // Kąt obrotu
+        this.angle = Math.atan2(cursorX - this.x + Game.camera.xView, - (cursorY - this.y + Game.camera.yView) )*(180/Math.PI) - 90;
+
+        // Pozycja lufy
+        this.weapon.barrelX = this.x + this.weapon.length * Math.cos((this.angle + 13) / (180/Math.PI));
+        this.weapon.barrelY = this.y + this.weapon.length * Math.sin((this.angle + 13) / (180/Math.PI));
+        
+        this.guiUpdate();
+        
+        // Update pocisków
+        for(var i = 0; i < this.bullets.length; i++) {
+            this.bullets[i].update(i);
         }
 
+    }
+    
+    guiUpdate() {
         // Aktualizacja GUI
+        
+        if(this.mana < 10) document.getElementById('skill1').classList = 'skill unactive';
+        else document.getElementById('skill1').classList = 'skill';
+        
+        if(this.medKits == 0) document.getElementById('skill2').classList = 'skill unactive';
+        else document.getElementById('skill2').classList = 'skill';
 
         document.getElementById("username").innerHTML = this.name;
 
@@ -129,15 +155,6 @@ class Player {
         document.getElementById("gun-mag").innerHTML = this.weapon.mag;
         document.getElementById("gun-ammo").innerHTML = this.weapon.ammo;
         document.getElementById("gun-name").innerHTML = this.weapon.name;
-
-        // Kąt obrotu
-        this.angle = Math.atan2(cursorX - this.x + Game.camera.xView, - (cursorY - this.y + Game.camera.yView) )*(180/Math.PI) - 90;
-
-        // Pozycja lufy
-        this.weapon.barrelX = this.x + this.weapon.length * Math.cos((this.angle + 13) / (180/Math.PI));
-
-        this.weapon.barrelY = this.y + this.weapon.length * Math.sin((this.angle + 13) / (180/Math.PI));
-
     }
     
     move(vx, vy, skos = 1) {
@@ -245,6 +262,32 @@ class Player {
                 //brak ammo lub pelen magazynek
             }
         }
+    }
+    
+    placeCover() {
+        if(this.mana >= 10) {
+            Game.covers.push(new Cover(0, cursorX + Game.camera.xView, cursorY + Game.camera.yView, 50, 20000, this, Game.covers));
+            this.mana -= 10;
+        }
+    }
+    
+    useMedKit() {
+        if(this.medKits > 0 && this.hp != this.maxHp) {
+            
+            this.healing = true;
+            this.medKits--;
+            
+            let THIS = this;
+            setTimeout(function() {
+                THIS.hp += 200;
+                if(THIS.hp > THIS.maxHp) THIS.hp = THIS.maxHp;
+                console.log('healed');
+                THIS.healing = false;
+            }, 1500);
+            
+            
+        }
+        
     }
 
     hurt(ile) {

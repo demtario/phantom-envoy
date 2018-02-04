@@ -19,8 +19,7 @@
     <body>
         
         <div class="user">
-            <img src="img/face.jpg" class="user-picture" />
-            <h1 id="username"></h1>
+            <h1 id="username">Jonasz</h1>
             <div class="user-life">
                 <div id="life-bar"></div>
                 <div id="life-info"></div>
@@ -32,25 +31,41 @@
         </div>
         
         <div class="asidearea">
-            <div class="asideinfo"></div>
             <div class="map">
-                <h3 id="kills">0</h3>
-                <p>Zabici wrogowie</p>
+                <canvas id="minimap"></canvas>
             </div>
         </div>
         
+        <div class="killinfo">
+            <p>Zabici</p>
+            <h3 id="kills"></h3>
+        </div>
+
         <div class="skillbar">
-            <div class="skill" id="skill1"><img src="img/cover.jpg" /></div>
-            <div class="skill" id="skill2"><img src="img/firstaid.png" ></div>
+
+            <div class="skill" id="skill1">
+                <img src="img/cover.jpg" />
+            </div>
+
+            <div class="skill" id="skill2">
+                <img src="img/firstaid.png" >
+                <div class="loading"></div>
+                <div class="counter">0</div>
+            </div>
+
             <div class="skill"></div>
             <div class="skill"></div>
         </div>
         
         <div class="guns">
-            <h2 id="gun-name">Ak-47</h2>
-            <p><span id="gun-mag"></span>/<span id="gun-ammo"></span></p>
-            <img src="img/bron.jpg" />
-            <div id="gun-reloading">
+
+            <div class="left">
+                <h2 id="gun-name"></h2>
+                <p><span id="gun-mag"></span>/<span id="gun-ammo"></span></p>
+            </div>
+
+            <div class="image">
+                <img src="img/bron.jpg" />
                 <div id="gun-reloading-bar"></div>
             </div>
         </div>

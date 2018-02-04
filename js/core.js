@@ -177,6 +177,8 @@ Game.draw = function() {
     
     // Rysuje wrogów
     for(let i = 0; i<this.enemies.length; i++) Game.enemies[i].draw(Game.context);
+
+    Game.minimap();
 };
 
 // GameOver
@@ -244,3 +246,47 @@ Game.update = function() {
         this.wave+=1;
     }
 };
+
+// Minimapka
+Game.minimap = function() {
+
+    //create a new canvas
+    var newCanvas = document.getElementById('minimap');
+    var context = newCanvas.getContext('2d');
+
+    //set dimensions
+    newCanvas.width = 220;
+    newCanvas.height = 220;
+
+    context.fillStyle = '#777';
+    context.fillRect(0, 0, 220, 220);
+
+    let skalaX = Game.world.width / 220;
+    let skalaY = Game.world.height / 220;
+
+    // Powerupy
+    context.fillStyle = '#2f2';
+    for(let i = 0; i < Game.ammoPacks.length; i++) {
+        context.fillRect(this.ammoPacks[i].x / skalaX, this.ammoPacks[i].y / skalaY, 2, 2);
+    }
+
+    // Covery
+    context.fillStyle = 'black';
+    for(let i = 0; i < Game.covers.length; i++) {
+        context.fillRect(this.covers[i].x / skalaX, this.covers[i].y / skalaY, 3, 3);
+    }
+
+    //Wrogowie
+    context.fillStyle = '#f22';
+    for(let i = 0; i < Game.enemies.length; i++) {
+        context.fillRect(this.enemies[i].x / skalaX, this.enemies[i].y / skalaY, 3, 3);
+    }
+
+    //Gracz
+    context.fillStyle = 'gold';
+    context.fillRect(this.player.x / skalaX, this.player.y / skalaY, 3, 3);
+
+    //Obszar
+    context.strokeStyle = '#444';
+    context.strokeRect(Game.camera.xView/skalaX, Game.camera.yView/skalaY, Game.width/skalaX, Game.height/skalaY);
+}

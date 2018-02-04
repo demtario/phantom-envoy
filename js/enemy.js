@@ -25,22 +25,6 @@ class Mob {
         this.hp = this.maxHp;
     }
 
-    moveLeft(skos = 1) {
-        if(this.x > 20) this.x -= this.moveSpeed/Game.fps*this.speedModifier / skos;
-    }
-
-    moveRight(skos = 1) {
-        if(this.x < Game.world.width - 20) this.x += this.moveSpeed/Game.fps / skos;
-    }
-
-    moveUp(skos = 1) {
-        if(this.y > 20) this.y -= this.moveSpeed/Game.fps / skos;
-    }
-
-    moveDown(skos = 1) {
-        if(this.y < Game.world.height - 20) this.y += this.moveSpeed/Game.fps / skos;
-    }
-
     hurt(ile) {
         this.hp -= ile;
     }

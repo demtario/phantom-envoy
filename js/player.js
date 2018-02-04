@@ -14,7 +14,7 @@ class Player {
         this.maxMana = 200;
         this.mana = this.maxMana;
 
-        this.size = 80;
+        this.size = 60;
 
         this.kills = 0;
 
@@ -30,7 +30,7 @@ class Player {
 
         this.bullets = [];
         
-        this.medKits = 0;
+        this.medKits = 1;
     }
     
     draw(context, xView, yView) {
@@ -142,6 +142,8 @@ class Player {
         if(this.medKits == 0) document.getElementById('skill2').classList = 'skill unactive';
         else document.getElementById('skill2').classList = 'skill';
 
+        document.getElementById('skill2').querySelector(".counter").innerHTML = this.medKits;
+
         document.getElementById("username").innerHTML = this.name;
 
         document.getElementById('life-bar').style.width = this.hp/this.maxHp*100+'%';
@@ -216,7 +218,7 @@ class Player {
 
         clearTimeout(this.reloadTimeout);
         document.getElementById("gun-reloading-bar").style.transition = "0s";
-        document.getElementById("gun-reloading-bar").style.width = "0";
+        document.getElementById("gun-reloading-bar").style.height = "0";
         this.reloading = false;
         this.weapon.delay = false;
 
@@ -230,7 +232,7 @@ class Player {
 
                 this.reloading = true;
                 document.getElementById("gun-reloading-bar").style.transition = this.weapon.reloadTime/1000 + "s linear";
-                document.getElementById("gun-reloading-bar").style.width = "100%";
+                document.getElementById("gun-reloading-bar").style.height = "100%";
                 var oldSpeed = this.moveSpeed;
                 this.speedModifier = 1/2;
 
@@ -253,7 +255,7 @@ class Player {
 
                     play.speedModifier = 1;
                     document.getElementById("gun-reloading-bar").style.transition = "0s";
-                    document.getElementById("gun-reloading-bar").style.width = "0";
+                    document.getElementById("gun-reloading-bar").style.height = "0";
 
                     if(Game.sound) reloadSound.play();
                 }
@@ -272,17 +274,23 @@ class Player {
     }
     
     useMedKit() {
-        if(this.medKits > 0 && this.hp != this.maxHp) {
+        if(this.medKits > 0 && this.hp != this.maxHp && !this.healing) {
             
             this.healing = true;
             this.medKits--;
             
+            document.getElementById('skill2').querySelector(".loading").style.height = '100%';
+            document.getElementById('skill2').querySelector(".loading").style.transition = "1.5s linear";
+
             let THIS = this;
             setTimeout(function() {
                 THIS.hp += 200;
                 if(THIS.hp > THIS.maxHp) THIS.hp = THIS.maxHp;
                 console.log('healed');
                 THIS.healing = false;
+
+                document.getElementById('skill2').querySelector(".loading").style.height = '0';
+                document.getElementById('skill2').querySelector(".loading").style.transition = "0s";
             }, 1500);
             
             

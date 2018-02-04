@@ -1,9 +1,20 @@
+@font-face {
+    font-family: Ethnocentric;
+    src: url(ethnocentric.ttf);
+}
+
 body{
     margin: 0;
     height: 100vh;
     overflow: hidden;
-    font-family: 'Lato';
+    font-family: 'Ethnocentric';
+    font-weight: 300;
     background-color: #666;
+}
+
+:root
+{
+    --prim: rgba(11,39,39,0.6);
 }
 
 *{
@@ -14,72 +25,68 @@ canvas {
     box-shadow: 0px 0px 0px 2px #111;
 }
 
+#minimap
+{
+    box-shadow: none;
+}
+
 /* GUI */
 
 .user
 {
-    display: grid;
-    grid-template-columns: 130px 400px;
-    grid-template-rows: 50px 30px 30px;
-    grid-template-areas: 
-        'pic name'
-        'pic hp'
-        'pic mana';
-    grid-gap: 10px;
+    width: 430px;
     padding: 10px;
-    border-radius: 5px;
     align-items: center;
     position: fixed;
     top: 20px;
     left: 20px;
-    background-color: rgba(0,170,208,0.3);
-    border-bottom-left-radius: 100px;
-    border-top-right-radius: 100px;
+    background-color: var(--prim);
+}
+
+.user > *{
+    margin: 10px 0;
 }
 
 .user h1
 {
     grid-area: name;
     margin: 0;
-    font-size: 40px;
+    font-size: 30px;
     color: white;
     font-weight: 500;
-}
 
-.user-picture
-{
-    grid-area: pic;
-    width: 100%;
-    border-radius: 5px;
-    border-bottom-left-radius: 100px;
-    border-top-right-radius: 100px;
+    border-bottom: solid 2px white;
 }
 
 .user-life
 {
-    width: 100%;
+    width: calc(100% - 20px);
+    left: 10px;
     background-color: rgba(203,0,8,0.2);
-    border: solid 2px #CB0008;
+    border: solid 2px #E93939;
     height: 26px;
     position: relative;
-    border-radius: 5px;
+    border-radius: 2px;
     box-sizing: border-box;
+    transform: skewX(-30deg);
 }
 
 #life-bar
 {
     height: 100%;
-    background-color: #CB0008;
+    background-color: #E93939;
     transition: 0.3s;
+
 }
 
 #life-info
 {
     position: absolute;
-    top: -2px;
-    left: 0;
-    font-size: 16px;
-    line-height: 16px;
+    transform: skewX(30deg);
+    top: 0px;
+    left: 5px;
+    font-size: 14px;
+    line-height: 14px;
     padding: 5px;
     color: white;
     box-sizing: border-box;
@@ -92,30 +99,34 @@ canvas {
 
 .user-mana
 {
-    width: 100%;
-    background-color: rgba(0,120,253,0.2);
-    border: solid 2px #0068FF;
+    width: calc(100% - 20px);
+    left: 10px;
+    background-color: rgba(84,239,221,0.2);
+    border: solid 2px #54EFDD;
     height: 26px;
     position: relative;
-    border-radius: 5px;
+    border-radius: 2px;
+    transform: skewX(-30deg);
     box-sizing: border-box;
 }
 
 #mana-bar
 {
     height: 100%;
-    background-color: #0068FF;
+    background-color: #54EFDD;
     transition: 0.3s;
 }
 
 #mana-info
 {
     position: absolute;
-    top: -2px;
-    left: 0;
+    top: 0px;
+    left: 8px;
     height: 50px;
-    font-size: 16px;
-    line-height: 16px;
+    font-size: 14px;
+    line-height: 14px;
+
+    transform: skewX(30deg);
     padding: 5px;
     box-sizing: border-box;
     color: white;
@@ -128,30 +139,22 @@ canvas {
 
 .asidearea
 {
-    background-color: rgba(0,170,208,0.3);
+    background-color: var(--prim);
     width: 220px;
     padding: 20px;
     position: fixed;
     top: 20px;
     right: 20px;
-    border-radius: 50%;
-    border-top-right-radius: 10px;
+    padding: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.asideinfo
-{
-    width: 0px;
 }
 
 .map
 {
     width: 220px;
     height: 220px;
-    border-radius: 50%;
-    border-top-right-radius: 10px;
 /*    background-image: url(../img/mapka.jpg);*/
     
     display: flex;
@@ -164,12 +167,37 @@ canvas {
 {
     margin: 0;
     font-size: 50px;
-    color: #8B0000;
 }
 
 .map p
 {
     margin: 0;
+    text-align: center;
+    font-size: 18px;
+    color: white;
+}
+
+.killinfo
+{
+    padding: 10px;
+    background-color: var(--prim);
+    position: fixed;
+    top: 20px;
+    right: 260px;
+}
+
+.killinfo h3
+{
+    margin: 0;
+    color: #8B0000;
+    text-align: center;
+    font-size: 28px;
+}
+
+.killinfo p
+{
+    margin: 0;
+    text-align: center;
     font-size: 18px;
     color: white;
 }
@@ -179,11 +207,8 @@ canvas {
     position: fixed;
     left: 20px;
     bottom: 20px;
-    background-color: rgba(0,170,208,0.3);
-    padding: 20px 30px;
-    border-radius: 10px;
-    border-top-left-radius: 100px;
-    border-bottom-right-radius: 100px;
+    background-color: var(--prim);
+    padding: 20px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -194,37 +219,12 @@ canvas {
 {
     height: 75px;
     width: 75px;
-    background-color: rgba(0,170,208,0.6);
+    background-color: var(--prim);
     color: white;
-    border-radius: 5px;
-    border-top-left-radius: 30px;
-    border-bottom-right-radius: 30px;
     margin: 0 5px;
     counter-increment: key-number;
     position: relative;
     box-sizing: border-box;
-    overflow: hidden;
-    transition: 0.3s;
-}
-
-.skill::before
-{
-    content: counter(key-number);
-    padding: 3px 3px;
-    font-family: Courier;
-    line-height: 18px;
-    background-color: rgba(0,170,208,1);
-    font-size: 18px;
-    position: absolute;
-    border-radius: 5px;
-    bottom: 4px;
-    left: 4px;
-    z-index: 20;
-}
-
-.skill.unactive img
-{
-    filter: grayscale(1);
 }
 
 .skill img{
@@ -233,32 +233,67 @@ canvas {
     object-fit: cover;
 }
 
+.skill::before
+{
+    content: counter(key-number);
+    padding: 3px 3px;
+    display: block;
+    width: 18px;
+    text-align: center;
+    line-height: 18px;
+    background-color: rgb(11,39,39);
+    font-size: 18px;
+    position: absolute;
+    border-radius: 50%;
+    bottom: -9px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    z-index: 20;
+}
+
+.skill .counter
+{
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    font-size: 12px;
+    z-index: 20;
+}
+
+.skill .loading
+{
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background-color: green;
+    opacity: 0.5;
+    height: 0;
+}
+
+.unactive img
+{
+    filter: grayscale(1);
+}
+
 .guns
 {
     position: fixed;
+    width: 300px;
     right: 20px;
     bottom: 20px;
     align-items: center;
-    justify-content: center;
+    justify-content: flex-end;
     text-align: right;
-    display: grid;
-    grid-template-columns: 160px 134px;
-    grid-template-rows: 1fr 25px 1fr;
-    grid-template-areas: 
-        'name primary'
-        'ammo primary'
-        'reloading primary';
+    display: flex;
     padding: 10px;
     
-    background-color: rgba(0,170,208,0.3);
-    border-bottom-left-radius: 100px;
-    border-top-right-radius: 100px;
+    background-color: var(--prim);
     
 }
 
 .guns h2
 {
-    grid-area: name;
     margin: 0;
     font-size: 30px;
     font-weight: 500;
@@ -270,41 +305,35 @@ canvas {
 
 .guns p
 {
-    grid-area: ammo;
     margin: 0;
     margin-right: 10px;
     font-size: 22px;
+    color: #888;
     align-self: flex-start;
 }
 
-.guns img
+.guns .image
 {
-    grid-area: primary;
     width: 120px;
     height: 120px;
-    object-fit: cover;
-    border-radius: 50%;
     background-color: white;
+    position: relative;
 }
 
-#gun-reloading
+.guns .image img
 {
-    width: 100px;
-    height: 25px;
-    margin-top: 10px;
-    margin-right: 10px;
-    margin-left: auto;
-    align-self: flex-start;
-    border-radius: 4px;
-    border: solid 2px darkred;
-    background-color: rgba(139,0,0,0.2);
-}
-
-#gun-reloading-bar
-{
+    object-fit: cover;
+    width: 100%;
     height: 100%;
-    width: 0%;
-    background-color: darkred;
-    transition-timing-function: linear !important;
-    margin: 0 !important;
+}
+
+.guns .image #gun-reloading-bar
+{
+    width: 100%;
+    height: 0px;
+    position: absolute;
+    bottom: 0;
+    background-color: #8B0000;
+    opacity: 0.6;
+    z-index: 20;
 }

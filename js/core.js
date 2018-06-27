@@ -53,6 +53,7 @@ window.addEventListener('mousewheel', function(e) { scrolling=true; });
 let Controls = {
     reload: 82,
     changeWeapon: 69,
+    enterVehicle: 70,
     
     skill1: 49,
     skill2: 50,
@@ -118,6 +119,9 @@ Game.start = function() {
 
     this.covers = [];
 
+    // Pojazdy
+    this.vehicles = []
+
     // Let's go
     Game._onEachFrame(Game.run);
 }
@@ -166,6 +170,9 @@ Game.draw = function() {
     //Rysuje mapę
     Game.world.draw(Game.context,Game.camera.xView,Game.camera.yView);
 
+     // Rysuj pojazd
+     for(let i = 0; i<this.vehicles.length; i++) Game.vehicles[i].draw(Game.context);
+
     // Rysuje ammo
     for(let i = 0; i<this.ammoPacks.length; i++) Game.ammoPacks[i].draw(Game.context);
 
@@ -177,6 +184,8 @@ Game.draw = function() {
     
     // Rysuje wrogów
     for(let i = 0; i<this.enemies.length; i++) Game.enemies[i].draw(Game.context);
+
+   
 
     Game.minimap();
 };
@@ -223,6 +232,8 @@ Game.update = function() {
 
     Game.player.update(); // Gracz
 
+    for(let i = 0; i<this.vehicles.length; i++) Game.vehicles[i].update(i); // Pojazdy
+
     for(let i = 0; i<this.enemies.length; i++) Game.enemies[i].update(i); // Wrogowie
 
     for(let i = 0; i<this.ammoPacks.length; i++) Game.ammoPacks[i].update(i); // AmmoPack'i i HealtPack'i
@@ -234,7 +245,7 @@ Game.update = function() {
 
     //// GENERACJA OBIEKTÓW
 
-    if(Game.enemies.length == 0) {
+    if(Game.enemies.length == 1) { //PAUSED ENEMIES
         Game.ammoPacks.push(new AmmoPack(Game.ammoPacks.length, Game.ammoPacks, 50));
         Game.ammoPacks.push(new HealthPack(Game.ammoPacks.length, Game.ammoPacks, 50));
 

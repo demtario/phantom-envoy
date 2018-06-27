@@ -63,6 +63,11 @@ class Player {
         if(vX != 0 && vY != 0) this.move(vX, vY, skosik);
         else this.move(vX, vY);
 
+        if(this.inVehicle) {
+            this.x = this.currentVehicle.x;
+            this.y = this.currentVehicle.y;
+        }
+
         //Sprint
         if(Key.isDown(Key.SHIFT) && !this.reloading && this.mana > 0) {
             this.speedModifier = 1.4;
@@ -90,18 +95,35 @@ class Player {
             nowClicked = 'e';
             scrolling = false;
         }
+
+        // Wsiadka do pojazdu
+        if(nowClicked == Controls.enterVehicle) {
+            
+            if(this.inVehicle) {
+                this.exitVehicle()
+            } else {
+                this.enterVehicle(0)
+            }
+
+            nowClicked = 'f'
+        }
         
         // Skille
-        if(nowClicked == Controls.skill1) {
+        if(nowClicked == Controls.skill1) { //Osłona
             this.placeCover();
             nowClicked = '1';
         }
         
-        if(nowClicked == Controls.skill2) {
+        if(nowClicked == Controls.skill2) { //Medkit
             this.useMedKit();
             nowClicked = '2';
         }
         if(this.healing) this.speedModifier = 0;
+
+        if(nowClicked == Controls.skill3) { //Pojazd
+            this.summonCar();
+            nowClicked = '3';
+        }
 
         //Regeneracja many
         if(!this.manaDelay && this.mana < this.maxMana){
@@ -272,6 +294,10 @@ class Player {
             this.mana -= 10;
         }
     }
+
+    summonCar() {
+        Game.vehicles.push(new Vehicle(Game.vehicles.length, Game.vehicles, cursorX + Game.camera.xView, cursorY + Game.camera.yView))
+    }
     
     useMedKit() {
         if(this.medKits > 0 && this.hp != this.maxHp && !this.healing) {
@@ -296,6 +322,18 @@ class Player {
             
         }
         
+    }
+
+    enterVehicle(index) {
+        Game.vehicles[index].playerEnter()
+        this.inVehicle = true;
+        this.currentVehicle = Game.vehicles[index];
+    }
+
+    exitVehicle() {
+        this.currentVehicle.playerExit()
+        this.inVehicle = false;
+        this.currentVehicle = null;
     }
 
     hurt(ile) {

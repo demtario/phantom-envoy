@@ -11,8 +11,9 @@ class Vehicle {
         this.sizeX = 100
         this.sizeY = 160
 
-        this.maxSpeed = 40 //pixels per second
-        this.acceleration = 2 //pps^2
+        this.maxSpeed = 420 //pixels per second
+        this.acceleration = 2
+        this.breaksPower = 1
 
         this.currentSpeed = 0
     }
@@ -30,24 +31,29 @@ class Vehicle {
     update(i) {
         this.index = i
 
-        if(this.isDriver) {
+        let vX = 0;
+        let vY = 0;
 
-            let vX = 0;
-            let vY = 0;
+        if(this.isDriver) {
 
             if(Key.isDown(Key.RIGHT) || Key.isDown(Key.D)) this.angle++; // Prawo
             if(Key.isDown(Key.LEFT) || Key.isDown(Key.A)) this.angle--; // Lewo
     
-            if(Key.isDown(Key.UP) || Key.isDown(Key.W) ) this.currentSpeed = 40; // Góra
-            if(Key.isDown(Key.DOWN) || Key.isDown(Key.S)) this.currentSpeed = 0; //Dół
+            if(Key.isDown(Key.UP) || Key.isDown(Key.W) )  // Góra
+                if(this.currentSpeed + this.acceleration <= this.maxSpeed) this.currentSpeed += this.acceleration;
+            
+            if(Key.isDown(Key.DOWN) || Key.isDown(Key.S))  //Dół
+                if(this.currentSpeed - this.breaksPower >= -60)this.currentSpeed -= this.breaksPower;
 
-            let vx = this.currentSpeed/30 * Math.cos(this.angle-(Math.PI/2));
-            let vy = this.currentSpeed/30 * Math.sin(this.angle-(Math.PI/2));
-
-            this.x += vx;
-            this.y += vy;
-
+        } else {
+            if(this.currentSpeed - this.breaksPower >= 0)this.currentSpeed -= this.breaksPower;
         }
+
+        let vx = this.currentSpeed/60 * Math.cos(this.angle * Math.PI/180-(Math.PI/2));
+        let vy = this.currentSpeed/60 * Math.sin(this.angle * Math.PI/180-(Math.PI/2));
+
+        this.x += vx;
+        this.y += vy;
     }
 
     playerEnter() {

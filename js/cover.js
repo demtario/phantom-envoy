@@ -35,28 +35,28 @@ class Cover {
     }
 }
 
-function isColiding(px, py, me, table) {
+function isColiding(px, py, me, array) {
 
 
     if(me.size) {
-        var PsizeX = me.size/2;
-        var PsizeY = me.size/2;
+        let PsizeX = me.size/2;
+        let PsizeY = me.size/2;
     } else {
-        var PsizeX = me.sizeX/2;
-        var PsizeY = me.sizeY/2;
+        let PsizeX = me.sizeX/2;
+        let PsizeY = me.sizeY/2;
     }
 
-    for(let i = 0; i < table.length; i++) {
+    for(let i = 0; i < array.length; i++) {
 
-        let x = table[i].x;
-        let y = table[i].y;
+        let x = array[i].x;
+        let y = array[i].y;
 
-        if(table[i].size) {
-            var sizeX = table[i].size/2;
-            var sizeY = table[i].size/2;
+        if(array[i].size) {
+            let sizeX = array[i].size/2;
+            let sizeY = array[i].size/2;
         } else {
-            var sizeX = table[i].sizeX/2;
-            var sizeY = table[i].sizeY/2;
+            let sizeX = array[i].sizeX/2;
+            let sizeY = array[i].sizeY/2;
         }
 
 

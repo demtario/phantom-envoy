@@ -111,13 +111,13 @@ Game.start = function() {
     Game.camera.follow(Game.player, Game.width/2, Game.height/2);
 
     // Wrogowie
-    this.enemies = [];
-    this.wave = 1;
+    this.enemies = []
+    this.wave = 1
     
     // Powerupy
-    this.ammoPacks = [];
+    this.ammoPacks = []
 
-    this.covers = [];
+    this.covers = []
 
     // Pojazdy
     this.vehicles = []

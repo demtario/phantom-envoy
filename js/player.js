@@ -183,7 +183,9 @@ class Player {
     
     move(vx, vy, skos = 1) {
         let covers = isColiding(this.x + vx * this.moveSpeed/Game.fps*this.speedModifier / skos, this.y + vy * this.moveSpeed/Game.fps*this.speedModifier / skos, this, Game.covers);
+
         let area = isColiding(this.x + vx * this.moveSpeed/Game.fps*this.speedModifier / skos, this.y + vy * this.moveSpeed/Game.fps*this.speedModifier / skos, this, [{x: Game.world.width/2, y: Game.world.height/2, sizeX: Game.world.width-50, sizeY: Game.world.height-50}]);
+        
         if(area && !covers) {
             this.x += vx * this.moveSpeed/Game.fps*this.speedModifier / skos;
             this.y += vy * this.moveSpeed/Game.fps*this.speedModifier / skos

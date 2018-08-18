@@ -245,7 +245,7 @@ Game.update = function() {
 
     //// GENERACJA OBIEKTÓW
 
-    if(Game.enemies.length == 1) { //PAUSED ENEMIES
+    if(Game.enemies.length == 0) { //PAUSED ENEMIES
         Game.ammoPacks.push(new AmmoPack(Game.ammoPacks.length, Game.ammoPacks, 50));
         Game.ammoPacks.push(new HealthPack(Game.ammoPacks.length, Game.ammoPacks, 50));
 
@@ -291,6 +291,12 @@ Game.minimap = function() {
     context.fillStyle = '#f22';
     for(let i = 0; i < Game.enemies.length; i++) {
         context.fillRect(this.enemies[i].x / skalaX, this.enemies[i].y / skalaY, 3, 3);
+    }
+
+    //Pojazdy
+    context.fillStyle = 'firebrick';
+    for(let i = 0; i < Game.vehicles.length; i++) {
+        context.fillRect(this.vehicles[i].x / skalaX, this.vehicles[i].y / skalaY, 3, 3);
     }
 
     //Gracz

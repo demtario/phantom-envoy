@@ -39,11 +39,11 @@ function isColiding(px, py, me, array) {
 
 
     if(me.size) {
-        let PsizeX = me.size/2;
-        let PsizeY = me.size/2;
+        var PsizeX = me.size/2;
+        var PsizeY = me.size/2;
     } else {
-        let PsizeX = me.sizeX/2;
-        let PsizeY = me.sizeY/2;
+        var PsizeX = me.sizeX/2;
+        var PsizeY = me.sizeY/2;
     }
 
     for(let i = 0; i < array.length; i++) {
@@ -52,11 +52,11 @@ function isColiding(px, py, me, array) {
         let y = array[i].y;
 
         if(array[i].size) {
-            let sizeX = array[i].size/2;
-            let sizeY = array[i].size/2;
+            var sizeX = array[i].size/2;
+            var sizeY = array[i].size/2;
         } else {
-            let sizeX = array[i].sizeX/2;
-            let sizeY = array[i].sizeY/2;
+            var sizeX = array[i].sizeX/2;
+            var sizeY = array[i].sizeY/2;
         }
 
 

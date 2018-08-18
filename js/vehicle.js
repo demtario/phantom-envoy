@@ -6,6 +6,9 @@ class Vehicle {
         this.x = x
         this.y = y
 
+        this.maxHp = 2000;
+        this.hp = this.maxHp;
+
         this.angle = 0;
 
         this.sizeX = 100
@@ -54,6 +57,11 @@ class Vehicle {
 
         this.x += vx;
         this.y += vy;
+
+        if(this.hp <= 0) {
+            this.playerExit()
+            this.delete()
+        }
     }
 
     playerEnter() {
@@ -63,6 +71,11 @@ class Vehicle {
     playerExit() {
         this.isDriver = false
 
+    }
+
+    hurt(ile) {
+        this.hp -= ile;
+        console.log(this.hp)
     }
 
     delete() {

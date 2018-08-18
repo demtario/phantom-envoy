@@ -81,6 +81,13 @@ class Bullet {
             this.delete();
         }
 
+        //pojazdy
+        let vehicleCol = isColiding(this.x, this.y, this, Game.vehicles);
+        if(vehicleCol && !Game.player.inVehicle) {
+            this.dealDamage(Game.vehicles[vehicleCol-1]);
+            this.delete();
+        }
+
         //gracz
         let playerCol = isColiding(this.x, this.y, this, [Game.player]);
         if(playerCol) {

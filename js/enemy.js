@@ -83,9 +83,10 @@ class Zombie extends Mob {
 
         let covers = isColiding(this.x + vx, this.y + vy, this, Game.covers);
         let enemies = isColiding(this.x + vx, this.y + vy, this, Game.enemies);
+        let vehicle = isColiding(this.x + vx, this.y + vy, this, Game.vehicles);
         let player = isColiding(this.x + vx, this.y + vy, this, [Game.player]);
 
-        if ( !covers && !player && Game.enemies[enemies-1]==this ) {
+        if ( !covers && !player && !vehicle && Game.enemies[enemies-1]==this ) {
             this.x += vx;
             this.y += vy;
         }
